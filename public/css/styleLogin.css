@@ -1,0 +1,71 @@
+
+body {
+      background-image: url("/css/imagenFondo.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+  
+
+  .fondo{
+    background-color: #587A33;
+
+  }
+  
+  .container {
+    background-color: #fff;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-group {
+    margin-bottom: 30px;
+  }
+  
+  h2{
+    text-align: center;
+  }
+  .imgLogo{
+    display: block; /* Para asegurarse de que la imagen se comporte como un elemento de bloque */
+    max-width: 50%; /* Para que la imagen no se desborde del contenedor */
+    height: auto; /* Para que la imagen conserve su proporción de aspecto */
+    margin: 0 auto; /* Para centrar la imagen horizontalmente */
+    border-radius: 5px; /* Para agregar bordes redondeados a la imagen, opcional */
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .boton_inicio {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .boton_inicio button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #587A33; /* Cambié el color de fondo */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #405926;
+}
+}

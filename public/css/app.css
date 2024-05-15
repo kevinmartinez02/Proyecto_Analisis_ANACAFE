@@ -1,0 +1,26 @@
+
+.Label{
+    
+        /* Estilos personalizados */
+        color: red;
+        font-weight: bold;
+        /* Agrega cualquier otro estilo que desees */
+      
+}
+.div1{
+        color:aqua;
+}
+.text_input{
+        color : red;
+        background-color: chocolate;
+}
+
+.input{
+        background-color: rebeccapurple;
+}
+.formu{
+        color: aliceblue;
+}
+.jola{
+        dark:text-gray-400
+}
