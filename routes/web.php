@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\http\Controllers\EmpleadosController;
+use App\Http\Controllers\LotesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,10 @@ Route::get('/inicio',function() {
 })->middleware('auth')->name('inicio');
 
 //Rutas de prueba para ver diseño
-Route::get('/lote', function(){
-    return view('formularios.formLote');
-})->name('lote');
+Route::get('/registro/lote',[LotesController::class,'index'])->middleware('auth')->name('registro.lote');
+Route::post('/registro/lote/store',[LotesController::class,'store'])->name('registro.lote.store');
+
+
 
 Route::get('/registroActividad', function(){
     return view('formularios.formRegActividad');

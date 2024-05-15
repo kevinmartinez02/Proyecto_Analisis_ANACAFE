@@ -3,8 +3,8 @@
 
 <!--Formulario para Registrar un Lote 
 Agregar rutas para DB-->
-<form action="">
-
+<form action="{{ route('registro.lote.store') }} " method="POST">
+    @csrf
     <div class="container-md text-center mt-4">
             <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Lote</h1>
 
@@ -17,7 +17,8 @@ Agregar rutas para DB-->
                     <div class="contaniner-lg row align-items-start">
                         <div class="col">
                             <div class="col form-floating mb-3">
-                                <input type="text" 
+                                <input type="text"
+                                    name = "nombreLote" 
                                     class="form-control" 
                                     id="nombreLote"
                                     style="--bs-focus-ring-color: rgba(var(--bs-success-rgb), .25)">
@@ -27,7 +28,7 @@ Agregar rutas para DB-->
                         <!--Espacio para agregar area, agregar controlador para agregar nombres a BD-->
                         <div class="col">
                             <div class="col form-floating mb-3">
-                                <input type="number" class="form-control" id="areaLote" 
+                                <input type="text" name="area" class="form-control" id="areaLote" 
                                     title="Ingresa el área en medidas de manzanas (número decimal)" 
                                     style="--bs-focus-ring-color: rgba(var(--bs-success-rgb), .25)">
                                 <label for="areaLote">Area (manzanas)</label>
