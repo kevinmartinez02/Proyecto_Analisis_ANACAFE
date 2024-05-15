@@ -24,6 +24,16 @@ Route::get('/inicio',function() {
     return view('inicio');
 })->middleware('auth')->name('inicio');
 
+//Rutas de prueba para ver diseño
+Route::get('/lote', function(){
+    return view('formularios.formLote');
+})->name('lote');
+
+Route::get('/registroActividad', function(){
+    return view('formularios.formRegActividad');
+})->name('registroActividad');
+
+
 //Ruta ingresar datos empleado
 Route::get('/registro',[EmpleadosController::class,'create'])->middleware('auth')->name('registro.empleado');
 Route::post('/registro/store',[EmpleadosController::class,'store'])->name('registro.datos');
