@@ -3,7 +3,7 @@
 
 <!--Formulario para Registrar un Lote 
 Agregar rutas para DB-->
-<form id="form" action="{{ route('guardar.actividad') }}" method="POST">
+<form  >
 @csrf
     <div class="container-md text-center mt-4">
                 <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Actividad</h1>

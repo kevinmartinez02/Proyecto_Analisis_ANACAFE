@@ -10,10 +10,16 @@ let total = 1;
  */
 btnAgregar.addEventListener('click', e => {
     let div = document.createElement('div');
-    div.classList.add('container-lg', 'p-2', 'g-col-6', 'mb-3'); // Añadir clases de Bootstrap
-    div.innerHTML = `<label>${total++}</label> - <input type="text" name="nombreSubactividad[]" placeholder="Nombre" required>   <button onclick="eliminar(this)" type="button" class="btn btn-danger">Eliminar</button>`;
+    div.classList.add('container-lg', 'p-1', 'g-col-6', 'mb-3'); // Añadir clases de Bootstrap
+    div.innerHTML = `
+        <label>${total++}</label> - 
+        <input type="text" name="nombreSubactividad[]" placeholder="Nombre" required> 
+        <textarea name="descripcion[]" style="height: 50px; vertical-align: top;" placeholder="Descripción" required></textarea>  
+        <button onclick="eliminar(this)" type="button" class="btn btn-danger">Eliminar</button>
+    `;
     contenedor.appendChild(div);
 })
+
 
 /**
  * Método para eliminar el div contenedor del input
