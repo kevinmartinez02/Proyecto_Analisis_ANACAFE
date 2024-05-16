@@ -13,22 +13,22 @@ class ActividadController extends Controller
         return view('formularios.formRegActividad');
     }
 
-    public function store(Request $reques){
-        $nombre_actividad = $request->input('nombreActividad');
-        $subActividades = $request->input('nombre_subactividad');
+    public function store(Request $request){
+       $nombre_actividad = $request->input('nombreActividad');
+        $subActividades = $request->input('nombreSubactividad');
         $subActividadesDescription = $request->input('descripcion');
 
-        $actividad = new Actividad;
-        $actividad->nombreActividad = $nombre_actividad;
-        $actividad->save();
+        $actividades = new Actividad();
+        $actividades->nombreActividad = $nombre_actividad;
+        $actividades->save();
         
     
 
-        foreach ($subactividad as $index => $subactividad) {
-            $sub = new Subactividad();
-            $sub->nombre = $subactividad;
-            $sub->descripcion = $descripciones[$index]; // Asociar la descripción con la subactividad
-            $sub->actividad_id = $actividad->id; // Asociar la subactividad con la actividad principal
+        foreach ($subActividades as $index => $subactividad) {
+            $sub = new SubActividad();
+            $sub->nombreSubActividad = $subactividad;
+            $sub->descripcion =$subActividadesDescription [$index]; // Asociar la descripción con la subactividad
+            $sub->id_actividad= $actividades->id; // Asociar la subactividad con la actividad principal
             $sub->save();
         }
 

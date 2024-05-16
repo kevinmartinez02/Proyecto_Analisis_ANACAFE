@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Http\\Controllers\\ActividadController' => $baseDir . '/app/Http/Controllers/ActividadController.php',
     'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => $baseDir . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
     'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => $baseDir . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
     'App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController' => $baseDir . '/app/Http/Controllers/Auth/EmailVerificationNotificationController.php',
@@ -21,6 +22,7 @@ return array(
     'App\\Http\\Controllers\\EmpleadosController' => $baseDir . '/app/Http/Controllers/EmpleadosController.php',
     'App\\Http\\Controllers\\LotesController' => $baseDir . '/app/Http/Controllers/LotesController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
+    'App\\Http\\Controllers\\SubActividadController' => $baseDir . '/app/Http/Controllers/SubActividadController.php',
     'App\\Http\\Controllers\\mainController' => $baseDir . '/app/Http/Controllers/mainController.php',
     'App\\Http\\Controllers\\saveDBase' => $baseDir . '/app/Http/Controllers/saveDBase.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',

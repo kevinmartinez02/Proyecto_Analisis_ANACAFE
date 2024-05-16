@@ -3,7 +3,10 @@
 
 <!--Formulario para Registrar un Lote 
 Agregar rutas para DB-->
+
 <form id="form" action="{{ route('registro.actividad.store') }}" method="POST">
+
+
 @csrf
     <div class="container-md text-center mt-4">
                 <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Actividad</h1>
@@ -53,6 +56,7 @@ Agregar rutas para DB-->
                         </div>  
                 </div>
         </div>
+       
 </form>
 <script src="{{ asset('js/campoDinamico.js') }}"></script>
 <script src="{{ asset('js/formActividad.js') }}"></script>
