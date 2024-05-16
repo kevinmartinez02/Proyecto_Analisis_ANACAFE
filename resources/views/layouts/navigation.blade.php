@@ -46,7 +46,7 @@
                             <ul class="dropdown-menu">
                             <!-- ingresar rutas de destino para hacer referencia a las vistas-->
                             <li><a class="dropdown-item" href="{{ route('registro.empleado') }}">Empleado</a></li>
-                            <li><a class="dropdown-item" href="{{ route('registroActividad')}}">Actividad</a></li>
+                            <li><a class="dropdown-item" href="{{ route('registro.actividad')}}">Actividad</a></li>
                             <li><a class="dropdown-item" href="{{ route('registro.lote')}}">Lote</a></li>
                             </ul>
                         </li>

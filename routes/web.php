@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\http\Controllers\EmpleadosController;
 use App\Http\Controllers\LotesController;
+use App\Http\Controllers\ActividadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,10 +32,9 @@ Route::post('/registro/lote/store',[LotesController::class,'store'])->name('regi
 
 
 
-Route::get('/registroActividad', function(){
-    return view('formularios.formRegActividad');
-})->name('registroActividad');
-
+Route::get('/registroActividad',[ActividadController::class,'index']
+)->middleware('auth')->name('registro.actividad');
+Route::post('/registroActividad/store',[ActividadController::class,'store'])->name('registro.actividad.store');
 
 //Ruta ingresar datos empleado
 Route::get('/registro',[EmpleadosController::class,'create'])->middleware('auth')->name('registro.empleado');
