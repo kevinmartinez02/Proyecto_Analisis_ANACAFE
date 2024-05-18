@@ -38,7 +38,7 @@
                                 <li><a class="dropdown-item" href="#">Quincenal</a></li>
                                 <li><a class="dropdown-item" href="#">Mensual</a></li>
                                 </ul>
-                            </li>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Registro
@@ -50,7 +50,16 @@
                             <li><a class="dropdown-item" href="{{ route('registro.lote')}}">Lote</a></li>
                             </ul>
                         </li>
-                        
+                        <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Consultas
+                                </a>
+                                <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{route('mostrar.empleados')}}">Mostrar empleados</a></li>
+                                <li><a class="dropdown-item" href="{{route('buscarempleado')}}">Buscar empleado</a></li>
+                                <li><a class="dropdown-item" href="#">Estado de empleado</a></li>
+                                </ul>
+                        </li>
                         </ul>
                     </div>
                     

@@ -44,7 +44,7 @@ Route::post('/registro/store',[EmpleadosController::class,'store'])->name('regis
 Route::get('/empleados/mostrarEmpleados',[EmpleadosController::class,'mostrarEmpleados'])->middleware('auth')->name('mostrar.empleados');
 
 Route::get('/empleados/mostrarEmpleado/{nombre}',[EmpleadosController::class,'mostrarEmpleado'])->name('mostrar.empleado.buscado');
-Route::get('/empleados/buscarEmpleado',[EmpleadosController::class,'mostrarViewBuscarEmpleado'])->name('buscar.empleado');
+Route::get('/empleados/buscarEmpleado',[EmpleadosController::class,'mostrarViewBuscarEmpleado'])->name('buscarempleado');
 Route::post('/empleados/store',[EmpleadosController::class,'buscarEmpleado'])->name('buscar.empleado');
 
 
