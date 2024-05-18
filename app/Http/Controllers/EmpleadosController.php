@@ -24,8 +24,23 @@ class EmpleadosController extends Controller
             return redirect()->route('registro.empleado');
         }
 
-        public function show($id){
-            $id = empleados::find($id);
-            return view('mostrar',compact('id'));
+        public function mostrarEmpleados(){
+            $encontrado = empleados::all();
+            return view('consultas.mostrarEmpleado',compact('encontrado'));
         }
+        
+        protected  function mostrarEmpleado($user){
+            return view('consultas.mostrarEmpleadoBuscado',compact('user'));
+    
+        }
+        public function buscarEmpleado(Request $request){
+            $encontrado = empleados::where('nombre', $request->nombre)->first();
+            return $this->mostrarEmpleado($encontrado);
+        }
+        public function mostrarViewBuscarEmpleado(){
+            return view('consultas.buscarEmpleado');
+        }
+
+
+        
 }

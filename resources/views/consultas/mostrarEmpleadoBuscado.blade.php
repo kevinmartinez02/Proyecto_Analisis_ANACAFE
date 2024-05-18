@@ -6,7 +6,7 @@
 
             <!-- Lista de Usuarios -->
             <div class="row">
-                @forelse($encontrado as $user)
+               
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
@@ -22,12 +22,6 @@
                         </div>
                     </div>
                 </div>
-                @empty
-                <div class="col-12">
-                    <div class="alert alert-info" role="alert">
-                        No se encontraron usuarios
-                    </div>
-                </div>
-                @endforelse 
+             
             </div>
     </div>

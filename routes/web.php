@@ -41,7 +41,12 @@ Route::get('/registro',[EmpleadosController::class,'create'])->middleware('auth'
 Route::post('/registro/store',[EmpleadosController::class,'store'])->name('registro.datos');
 
 //ruta para mostar datos empleado
-Route::get('/empleados/{id}/informacion',[EmpleadosController::class,'show'])->middleware('auth')->name('mostrar');
+Route::get('/empleados/mostrarEmpleados',[EmpleadosController::class,'mostrarEmpleados'])->middleware('auth')->name('mostrar.empleados');
+
+Route::get('/empleados/mostrarEmpleado/{nombre}',[EmpleadosController::class,'mostrarEmpleado'])->name('mostrar.empleado.buscado');
+Route::get('/empleados/buscarEmpleado',[EmpleadosController::class,'mostrarViewBuscarEmpleado'])->name('buscar.empleado');
+Route::post('/empleados/store',[EmpleadosController::class,'buscarEmpleado'])->name('buscar.empleado');
+
 
 
 Route::middleware('auth')->group(function () {
