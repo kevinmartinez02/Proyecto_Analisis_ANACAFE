@@ -1,6 +1,15 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <!--Formulario para Registrar un Lote 
 Agregar rutas para DB-->
 <form action="{{ route('registro.lote.store') }} " method="POST">

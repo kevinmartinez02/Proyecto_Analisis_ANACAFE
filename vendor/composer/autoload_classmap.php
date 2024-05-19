@@ -38,6 +38,8 @@ return array(
     'App\\Http\\Requests\\Auth\\LoginRequest' => $baseDir . '/app/Http/Requests/Auth/LoginRequest.php',
     'App\\Http\\Requests\\ProfileUpdateRequest' => $baseDir . '/app/Http/Requests/ProfileUpdateRequest.php',
     'App\\Models\\Actividad' => $baseDir . '/app/Models/Actividad.php',
+    'App\\Models\\EstadoEmpleado' => $baseDir . '/app/Models/EstadoEmpleado.php',
+    'App\\Models\\FechaIngreso' => $baseDir . '/app/Models/FechaIngreso.php',
     'App\\Models\\Lote' => $baseDir . '/app/Models/Lote.php',
     'App\\Models\\Producto' => $baseDir . '/app/Models/Producto.php',
     'App\\Models\\SubActividad' => $baseDir . '/app/Models/SubActividad.php',

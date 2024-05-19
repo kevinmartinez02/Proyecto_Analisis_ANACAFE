@@ -12,6 +12,12 @@ class LotesController extends Controller
         return view('formularios.formLote');
     }
     public function store(Request $request){
+
+        $request->validate([
+            'nombreLote'=> ['required', 'unique:lotes'],
+            'area' => 'required'
+        ]);
+
         $lote = new Lote;
         $lote->nombreLote = $request->nombreLote;
         $lote->area = $request->area;

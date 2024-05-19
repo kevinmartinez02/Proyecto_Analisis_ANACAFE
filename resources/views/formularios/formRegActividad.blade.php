@@ -3,7 +3,15 @@
 
 <!--Formulario para Registrar un Lote 
 Agregar rutas para DB-->
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form id="form" action="{{ route('registro.actividad.store') }}" method="POST">
 
 
