@@ -12,6 +12,13 @@ class EmpleadosController extends Controller
             return view('formRegistro');
         }
         public function store(Request $request){
+            // Validate that incoming data is correct
+            $request->validate([
+                'dpi' => 'required|unique:empleados|max:13',
+                'nombre' => 'required',
+                'numeroIGSS' => 'required'
+            ]);
+
             $empleados = new empleados;
             $empleados->nombre = $request->nombre;
             $empleados->apellido = $request->apellido;
