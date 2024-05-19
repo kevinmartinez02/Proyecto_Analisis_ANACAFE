@@ -28,7 +28,8 @@ class EmpleadosController extends Controller
             $empleados->direccion = $request->direccion;
             $empleados->numeroTelefono = $request->numeroTelefono;
             $empleados->save();
-            return redirect()->route('registro.empleado');
+            return redirect()->back()->with('success', 'Empleado registrado correctamente');
+
         }
 
         public function mostrarEmpleados(){
