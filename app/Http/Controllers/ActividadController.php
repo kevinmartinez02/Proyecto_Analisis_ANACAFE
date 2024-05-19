@@ -14,6 +14,10 @@ class ActividadController extends Controller
     }
 
     public function store(Request $request){
+
+        $request->validate([
+            'nombreActividad' => ['required', 'unique:actividads']
+        ]);
        $nombre_actividad = $request->input('nombreActividad');
         $subActividades = $request->input('nombreSubactividad');
         $subActividadesDescription = $request->input('descripcion');

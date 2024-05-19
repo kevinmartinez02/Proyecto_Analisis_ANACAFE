@@ -568,6 +568,8 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
         'App\\Models\\Actividad' => __DIR__ . '/../..' . '/app/Models/Actividad.php',
+        'App\\Models\\EstadoEmpleado' => __DIR__ . '/../..' . '/app/Models/EstadoEmpleado.php',
+        'App\\Models\\FechaIngreso' => __DIR__ . '/../..' . '/app/Models/FechaIngreso.php',
         'App\\Models\\Lote' => __DIR__ . '/../..' . '/app/Models/Lote.php',
         'App\\Models\\Producto' => __DIR__ . '/../..' . '/app/Models/Producto.php',
         'App\\Models\\SubActividad' => __DIR__ . '/../..' . '/app/Models/SubActividad.php',
