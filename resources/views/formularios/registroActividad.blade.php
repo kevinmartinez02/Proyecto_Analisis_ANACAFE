@@ -16,18 +16,41 @@
                     </div>
                 </div>
             </form>
-
-            <label for="party" class="form-label">Ingrese fecha de registro:</label>
-            <input type="date" name="party" min="2020-01-01" max="2026-12-31" class="form-control mb-3">
-
             <!-- Select para mostrar resultados -->
             <select id="resultado-empleados" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione un empleado</option>
             </select>
 
+            <!-- Ingresar fecha -->
+            <label for="party" class="form-label">Ingrese fecha de registro:</label>
+            <input type="date" name="party" min="2020-01-01" max="2026-12-31" class="form-control mb-3">
+
+
+            <!-- Mensaje flotante -->
             <div class="mb-3" id="mensaje-flotante">
-                <!-- Mensaje flotante para mostrar si se encontró el empleado -->
+                <!-- Mensaje flotante para mostrar si se encontró el empleado -->    
             </div>
+
+             <!--Select para Lote -->
+            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+                <option selected>Seleccione el Lote</option>
+                <option value="1">One</option>
+            </select>
+             <!-- Select para Actividad-->
+            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+                <option selected>Seleccione Actividad</option>
+                <option value="1">One</option>
+            </select>
+             <!-- Select para Sub-Actividad -->
+            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+                <option selected>Seleccione Sub-Actividad</option>
+                <option value="1">One</option>
+            </select>
+             <!-- Select para tipo Rendimiento -->
+            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+                <option selected>Seleccione tipo de Rendimiento</option>
+                <option value="1">One</option>
+            </select>
 
             <!-- Observaciones -->
             <div class="mb-3">
