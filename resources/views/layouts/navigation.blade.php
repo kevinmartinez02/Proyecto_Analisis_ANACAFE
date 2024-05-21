@@ -56,7 +56,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{route('mostrar.empleados')}}">Mostrar empleados</a></li>
-                                <li><a class="dropdown-item" href="{{route('buscarempleado')}}">Buscar empleado</a></li>
+                                
                                 <li><a class="dropdown-item" href="{{route('mostrar.estados.empleados')}}">Estado de empleado</a></li>
                                 </ul>
                         </li>

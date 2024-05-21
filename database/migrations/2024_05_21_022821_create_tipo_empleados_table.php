@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('empleados', function (Blueprint $table) {
+        Schema::create('tipo_empleados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('dpi')->unique();
-            $table->string('numeroIGSS')->unique();
-            $table->string('nit')->unique();
-            $table->string('direccion');
-            $table->string('numeroTelefono');
+            $table->string('tipo_empleado');
             $table->timestamps();
         });
     }
@@ -33,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empleados');
+        Schema::dropIfExists('tipo_empleados');
     }
 };
