@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\empleados;
+use App\Models\Empleado;
 use App\Models\FechaIngreso;
 use App\Models\EstadoEmpleado;
 
@@ -25,7 +25,7 @@ class EmpleadosController extends Controller
 
             
             //script para registro de un nuevo empleado
-            $empleados = new empleados;
+            $empleados = new Empleado;
             $empleados->nombre = $request->nombre;
             $empleados->apellido = $request->apellido;
             $empleados->dpi = $request->dpi;
@@ -40,10 +40,6 @@ class EmpleadosController extends Controller
             $estadoempleado->estado = 'Activo';
             $estadoempleado->save();
             //script para fecha de ingreso del cliente
-            $fechaingreso = new FechaIngreso;
-            $fechaingreso->id_empleado = $empleados->id;
-            $fechaingreso->fecha_ingreso = now()->toDateString();
-            $fechaingreso->save();
             
             return redirect()->back()->with('success', 'Empleado registrado correctamente');
         
@@ -57,30 +53,19 @@ class EmpleadosController extends Controller
         
             // Si hay un término de búsqueda, filtrar los empleados
             if ($query) {
-                $empleados = empleados::where('nombre', 'LIKE', "%{$query}%")
+                $empleados = Empleado::where('nombre', 'LIKE', "%{$query}%")
                     ->orWhere('apellido', 'LIKE', "%{$query}%")
                     ->get();
             } else {
                 // Si no hay un término de búsqueda, mostrar todos los empleados
-                $empleados = empleados::all();
+                $empleados = Empleado::all();
             }
         
             return view('consultas.mostrarEmpleado', compact('empleados'));
         }
         
         
-        protected  function mostrarEmpleado($user){
-            return view('consultas.mostrarEmpleadoBuscado',compact('user'));
-    
-        }
-        public function buscarEmpleado(Request $request){
-            $encontrado = empleados::where('nombre', $request->nombre)->first();
-            return $this->mostrarEmpleado($encontrado);
-        }
-        public function mostrarViewBuscarEmpleado(){
-            return view('consultas.buscarEmpleado');
-        }
-
+        
 
         
 }
