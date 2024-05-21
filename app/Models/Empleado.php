@@ -11,11 +11,11 @@ class Empleado extends Model
     protected $fillable =[
         'nombre',
         'apellido',
+        'id_tipo_empleado',
         'dpi',
         'numeroIGSS',
         'nit',
         'direccion',
-        'numeroTelefono',
-        'id_tipo_empleado'
+        'numeroTelefono'
     ];
 }

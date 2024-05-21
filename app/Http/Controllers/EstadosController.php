@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\EstadoEmpleado;
-use App\Models\empleados;
+use App\Models\Empleado;
 class EstadosController extends Controller
 {
     //
@@ -21,7 +21,7 @@ class EstadosController extends Controller
       $search = request('search');
 
       // Construir la consulta para obtener los empleados con sus estados correspondientes
-      $query = empleados::join('estado_empleados', 'empleados.id', '=', 'estado_empleados.id_empleado')
+      $query = Empleado::join('estado_empleados', 'empleados.id', '=', 'estado_empleados.id_empleado')
           ->select('empleados.*', 'estado_empleados.estado');
   
       // Aplicar el filtro de búsqueda si se proporciona

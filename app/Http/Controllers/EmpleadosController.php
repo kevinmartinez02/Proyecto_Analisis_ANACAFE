@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Empleado;
 use App\Models\FechaIngreso;
 use App\Models\EstadoEmpleado;
+use App\Models\TipoEmpleado;
 
 class EmpleadosController extends Controller
 {
     //public 
         public function create(){
-            return view('formRegistro');
+
+            $tipos_empleados = TipoEmpleado::all();
+            return view('formRegistro',compact('tipos_empleados'));
         }
         public function store(Request $request){
             // Validate that incoming data is correct
@@ -22,12 +25,15 @@ class EmpleadosController extends Controller
                 'nit' => ['required', 'unique:empleados' , 'size:9']
 
             ]);
+            $tipoEmpleadoId = $request->input('tipo_empleado');
+
 
             
             //script para registro de un nuevo empleado
             $empleados = new Empleado;
             $empleados->nombre = $request->nombre;
             $empleados->apellido = $request->apellido;
+            $empleados->id_tipo_empleado = $tipoEmpleadoId;
             $empleados->dpi = $request->dpi;
             $empleados->numeroIGSS = $request->numeroIGSS;
             $empleados->nit = $request->nit;

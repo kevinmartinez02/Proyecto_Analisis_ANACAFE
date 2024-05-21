@@ -71,10 +71,11 @@
 
                 <h1 style="color: green; font-family: Arial, sans-serif; font-size: 20px; font-weight: bold;" class="mt-4">Tipo empleado</h1>
 
-                <select class="form-select form-select-lg mt-4" aria-label="Large select example" >
-                    <option selected>Seleccionar tipo de empleado</option>
-                    <option value="1">Fijo</option>
-                    <option value="2">Eventual</option>
+                <select name="tipo_empleado" class="form-select form-select-lg mt-4" aria-label="Large select example" >
+                <option selected>Seleccionar tipo de empleado</option>
+                    @foreach($tipos_empleados as $tipos)
+                    <option value="{{$tipos->id}}" >{{ $tipos->tipo_empleado}}</option>
+                    @endforeach
                 </select>
 
 
