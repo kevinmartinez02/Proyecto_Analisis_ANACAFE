@@ -69,6 +69,15 @@
                     <div class="invalid-feedback">Por favor, introduce un número de teléfono válido de Guatemala.</div>
                 </div>
 
+                <h1 style="color: green; font-family: Arial, sans-serif; font-size: 20px; font-weight: bold;" class="mt-4">Tipo empleado</h1>
+
+                <select class="form-select form-select-lg mt-4" aria-label="Large select example" >
+                    <option selected>Seleccionar tipo de empleado</option>
+                    <option value="1">Fijo</option>
+                    <option value="2">Eventual</option>
+                </select>
+
+
                 <div style="text-align: center;" class="mt-4">
                     <button type="submit" class="btn btn-primary" style="background-color: #7DAF49; border: 2px solid #7DAF49;">Registrar Empleado</button>
                 </div>
