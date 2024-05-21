@@ -51,10 +51,23 @@ class EmpleadosController extends Controller
 
         }
 
-        public function mostrarEmpleados(){
-            $encontrado = empleados::all();
-            return view('consultas.mostrarEmpleado',compact('encontrado'));
+        public function mostrarEmpleados(Request $request)
+        {
+            $query = $request->input('search');
+        
+            // Si hay un término de búsqueda, filtrar los empleados
+            if ($query) {
+                $empleados = empleados::where('nombre', 'LIKE', "%{$query}%")
+                    ->orWhere('apellido', 'LIKE', "%{$query}%")
+                    ->get();
+            } else {
+                // Si no hay un término de búsqueda, mostrar todos los empleados
+                $empleados = empleados::all();
+            }
+        
+            return view('consultas.mostrarEmpleado', compact('empleados'));
         }
+        
         
         protected  function mostrarEmpleado($user){
             return view('consultas.mostrarEmpleadoBuscado',compact('user'));

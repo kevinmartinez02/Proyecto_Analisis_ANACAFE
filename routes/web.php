@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\http\Controllers\EmpleadosController;
 use App\Http\Controllers\LotesController;
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\EstadosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +27,14 @@ Route::get('/inicio',function() {
     return view('inicio');
 })->middleware('auth')->name('inicio');
 
+
 //Rutas de prueba para ver diseño
 Route::get('/registro/lote',[LotesController::class,'index'])->middleware('auth')->name('registro.lote');
 Route::post('/registro/lote/store',[LotesController::class,'store'])->name('registro.lote.store');
 
+//rutas para mostrar Estados clientes 
+Route::get('/empleados/estadosEmpleados',[EstadosController::class,'mostrarEstadoEmpleados'])->name('mostrar.estados.empleados');
+Route::put('/empleados/estadosEmplados/update',[EstadosController::class,'updateEstado'])->name('update.estado.empleado');
 
 
 Route::get('/registroActividad',[ActividadController::class,'index']
@@ -41,7 +46,7 @@ Route::get('/registro',[EmpleadosController::class,'create'])->middleware('auth'
 Route::post('/registro/store',[EmpleadosController::class,'store'])->name('registro.datos');
 
 //ruta para mostar datos empleado
-Route::get('/empleados/mostrarEmpleados',[EmpleadosController::class,'mostrarEmpleados'])->middleware('auth')->name('mostrar.empleados');
+Route::get('/empleados/mostrarEmpleados', [EmpleadosController::class, 'mostrarEmpleados'])->middleware('auth')->name('mostrar.empleados');
 
 Route::get('/empleados/mostrarEmpleado/{nombre}',[EmpleadosController::class,'mostrarEmpleado'])->name('mostrar.empleado.buscado');
 Route::get('/empleados/buscarEmpleado',[EmpleadosController::class,'mostrarViewBuscarEmpleado'])->name('buscarempleado');
