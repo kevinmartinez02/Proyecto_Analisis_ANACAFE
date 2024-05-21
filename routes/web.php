@@ -28,6 +28,7 @@ Route::get('/inicio',function() {
 })->middleware('auth')->name('inicio');
 
 
+
 //Rutas de prueba para ver diseño
 Route::get('/registro/lote',[LotesController::class,'index'])->middleware('auth')->name('registro.lote');
 Route::post('/registro/lote/store',[LotesController::class,'store'])->name('registro.lote.store');
