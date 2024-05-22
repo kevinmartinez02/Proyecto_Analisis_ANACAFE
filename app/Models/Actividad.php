@@ -10,4 +10,8 @@ class Actividad extends Model
     use HasFactory;
    
     protected $fillable = ['nombreActividad'];
+    public function subActividades()
+    {
+        return $this->hasMany(SubActividad::class, 'id_actividad');
+    }
 }

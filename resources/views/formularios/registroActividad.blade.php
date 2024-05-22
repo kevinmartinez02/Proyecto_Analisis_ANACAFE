@@ -1,98 +1,117 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 
-<form action="">
+<form>
+    @csrf
     <div class="container text-center mt-5">
         <label for="">Registrar actividades Fijo</label>
         <div class="col-md-6 offset-md-3">
-            <!-- Búsqueda -->
-            <form action="{{ route('mostrar.empleados') }}" method="GET" class="mb-3" id="form-filtrar">
+            <!-- Campo de búsqueda de empleado -->
+            <div class="mb-3" id="form-filtrar">
                 <div class="row">
                     <div class="col-md-8">
-                        <input type="text" id="buscar-empleado" class="form-control" placeholder="Buscar empleado" value="{{ request('search') }}">
-                    </div>
-                    <div class="col-md-4">
-                        <button type="button" id="btn-buscar" class="btn btn-primary w-100">Buscar</button>
+                        <input type="text" id="buscar-empleado" class="form-control" placeholder="Buscar empleado">
                     </div>
                 </div>
-            </form>
+            </div>
             <!-- Select para mostrar resultados -->
-            <select id="resultado-empleados" class="form-select form-select-lg mb-3" aria-label="Large select example">
+            <select id="resultado-empleados" name="empleado_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione un empleado</option>
             </select>
 
             <!-- Ingresar fecha -->
             <label for="party" class="form-label">Ingrese fecha de registro:</label>
-            <input type="date" name="party" min="2020-01-01" max="2026-12-31" class="form-control mb-3">
-
+            <input type="date" name="fecha" min="2020-01-01" max="2026-12-31" class="form-control mb-3">
 
             <!-- Mensaje flotante -->
             <div class="mb-3" id="mensaje-flotante">
-                <!-- Mensaje flotante para mostrar si se encontró el empleado -->    
+                <!-- Mensaje flotante para mostrar si se encontró el empleado -->
             </div>
 
-             <!--Select para Lote -->
-            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+            <!--Select para Lote -->
+            <select name="lote_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione el Lote</option>
-                <option value="1">One</option>
+                @foreach($lotes as $lote)
+                <option value="{{$lote->id}}">{{$lote->nombreLote}}</option>
+                @endforeach
             </select>
-             <!-- Select para Actividad-->
-            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+            
+            <!-- Select para Actividad-->
+            <select id="actividad" name="actividad_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione Actividad</option>
-                <option value="1">One</option>
+                @foreach($actividades as $actividad)
+                <option value="{{$actividad->id}}">{{$actividad->nombreActividad}}</option>
+                @endforeach
             </select>
-             <!-- Select para Sub-Actividad -->
-            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+
+            <select id="sub-actividad" name="sub_actividad_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione Sub-Actividad</option>
-                <option value="1">One</option>
             </select>
-             <!-- Select para tipo Rendimiento -->
-            <select class="form-select form-select-lg mb-3" aria-label="Large select example">
+        
+            <!-- Select para tipo Rendimiento -->
+            <select name="tipo_rendimiento" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione tipo de Rendimiento</option>
                 <option value="1">One</option>
+                <!-- Agregar más opciones si es necesario -->
             </select>
 
             <!-- Observaciones -->
             <div class="mb-3">
                 <label for="observaciones" class="form-label">Observaciones</label>
-                <input class="form-control" id="observaciones" name="observaciones" rows="3"></input>
+                <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
             </div>
 
             <!-- Botón para enviar información de Registro -->
-            <div style="text-align: center; " class="mt-4">
+            <div style="text-align: center;" class="mt-4">
                 <button type="submit" class="btn btn-primary" style="background-color: #7DAF49; border: 2px solid #7DAF49;">Registrar</button>
             </div>
         </div>
     </div>
 </form>
 
-<!-- Script para manejar la búsqueda de empleados y actualizar el select -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('btn-buscar').addEventListener('click', function() {
-            const searchTerm = document.getElementById('buscar-empleado').value;
-            // Realizar una solicitud AJAX para buscar empleados
-            // Reemplaza 'URL_DE_BUSQUEDA' con la ruta a tu controlador o endpoint de búsqueda
-            fetch(`URL_DE_BUSQUEDA?search=${searchTerm}`)
-                .then(response => response.json())
-                .then(data => {
-                    const select = document.getElementById('resultado-empleados');
-                    select.innerHTML = ''; // Limpiar opciones anteriores
-                    if (data.length > 0) {
-                        data.forEach(empleado => {
-                            const option = document.createElement('option');
-                            option.value = empleado.id;
-                            option.textContent = `${empleado.nombre} ${empleado.apellido}`;
-                            select.appendChild(option);
+    $(document).ready(function () {
+        $('#buscar-empleado').on('input', function () {
+            var search = $(this).val();
+            if (search.length >= 2) {
+                $.ajax({
+                    url: "{{ route('buscar.empleados') }}",
+                    type: "GET",
+                    data: { search: search },
+                    dataType: 'json',
+                    success: function (res) {
+                        $('#resultado-empleados').empty();
+                        $.each(res, function (key, value) {
+                            $('#resultado-empleados').append('<option value="' + value.id + '">' + value.nombre + ' ' + value.apellido + '</option>');
                         });
-                        // Mostrar mensaje flotante si se encontraron resultados
-                        document.getElementById('mensaje-flotante').innerHTML = `<p>Se encontraron ${data.length} empleados.</p>`;
-                    } else {
-                        // Mostrar mensaje flotante si no se encontraron resultados
-                        document.getElementById('mensaje-flotante').innerHTML = '<p>No se encontraron empleados.</p>';
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error en la solicitud AJAX:', xhr.responseText);
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                });
+            } else {
+                $('#resultado-empleados').empty();
+            }
         });
     });
+        $('#actividad').on('change', function () {
+            var actividadId = this.value;
+            $("#sub-actividad").html('');
+            $.ajax({
+                url: "{{ route('fetch.subactividades') }}",
+                type: "POST",
+                data: {
+                    actividad_id: actividadId,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function (res) {
+                    $('#sub-actividad').html('<option value="">Seleccione Sub-Actividad</option>');
+                    $.each(res, function (key, value) {
+                        $("#sub-actividad").append('<option value="' + value.id + '">' + value.nombreActividad + '</option>');
+                    });
+                }
+            });
+        });
 </script>
