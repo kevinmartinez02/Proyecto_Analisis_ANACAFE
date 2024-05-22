@@ -10,8 +10,13 @@ class SubActividad extends Model
     use HasFactory;
     protected $table="sub_actividades";
     protected $fillable = [
-        'nombreSubActividad',
+        'nombreActividad',
         'descripcion',
         'id_actividad'
     ];
+
+    public function actividad()
+    {
+        return $this->belongsTo(Actividad::class, 'id');
+    }
 }

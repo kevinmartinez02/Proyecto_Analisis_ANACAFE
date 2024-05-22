@@ -6,6 +6,7 @@ use App\http\Controllers\EmpleadosController;
 use App\Http\Controllers\LotesController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\EstadosController;
+use App\Http\Controllers\RegistroActividadEmpleadoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +50,10 @@ Route::post('/registro/store',[EmpleadosController::class,'store'])->name('regis
 //ruta para mostar datos empleado
 Route::get('/empleados/mostrarEmpleados', [EmpleadosController::class, 'mostrarEmpleados'])->middleware('auth')->name('mostrar.empleados');
 
+//ruta para ingresdr actividades y usuarios
 
-
+Route::get('/actividades/registro', [RegistroActividadEmpleadoController::class, 'registrarActividadEmpleado'])->name('registro.actividad.empleado');
+Route::post('/api/fetch-subactividades', [RegistroActividadEmpleadoController::class, 'fetchSubActividades'])->name('fetch.subactividades');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

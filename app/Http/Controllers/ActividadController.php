@@ -30,7 +30,7 @@ class ActividadController extends Controller
 
         foreach ($subActividades as $index => $subactividad) {
             $sub = new SubActividad();
-            $sub->nombreSubActividad = $subactividad;
+            $sub->nombreActividad = $subactividad;
             $sub->descripcion =$subActividadesDescription [$index]; // Asociar la descripción con la subactividad
             $sub->id_actividad= $actividades->id; // Asociar la subactividad con la actividad principal
             $sub->save();

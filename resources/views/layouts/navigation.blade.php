@@ -25,7 +25,7 @@
                                     Actividades
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Personal Fijo</a></li>
+                                    <li><a class="dropdown-item" href="{{route('registro.actividad.empleado')}}">Personal Fijo</a></li>
                                     <li><a class="dropdown-item" href="#">Personal Eventual</a></li>
                                 </ul>
                             </li>
