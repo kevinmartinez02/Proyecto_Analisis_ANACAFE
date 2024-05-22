@@ -7,13 +7,7 @@
         <label for="">Registrar actividades Fijo</label>
         <div class="col-md-6 offset-md-3">
             <!-- Campo de búsqueda de empleado -->
-            <div class="mb-3" id="form-filtrar">
-                <div class="row">
-                    <div class="col-md-8">
-                        <input type="text" id="buscar-empleado" class="form-control" placeholder="Buscar empleado">
-                    </div>
-                </div>
-            </div>
+            
             <!-- Select para mostrar resultados -->
             <select id="resultado-empleados" name="empleado_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione un empleado</option>
