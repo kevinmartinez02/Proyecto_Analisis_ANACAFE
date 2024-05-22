@@ -54,6 +54,8 @@ Route::get('/empleados/mostrarEmpleados', [EmpleadosController::class, 'mostrarE
 
 Route::get('/actividades/registro', [RegistroActividadEmpleadoController::class, 'registrarActividadEmpleado'])->name('registro.actividad.empleado');
 Route::post('/api/fetch-subactividades', [RegistroActividadEmpleadoController::class, 'fetchSubActividades'])->name('fetch.subactividades');
+Route::get('/api/buscar-empleados', [RegistroActividadEmpleadoController::class, 'buscarEmpleados'])->name('buscar.empleados');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
