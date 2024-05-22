@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 
-<form>
+<form method="POST" action="{{ route('registro.actividad.store')}}">
     @csrf
     <div class="container text-center mt-5">
         <label for="">Registrar actividades Fijo</label>
@@ -9,8 +9,12 @@
             <!-- Campo de búsqueda de empleado -->
             
             <!-- Select para mostrar resultados -->
-            <select id="resultado-empleados" name="empleado_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
+            <select  name="empleado_id" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione un empleado</option>
+                @foreach($empleados as $empleado)
+                <option value="{{$empleado->id}}" >{{$empleado->nombre}} {{$empleado->apellido}}</option>
+    
+                @endforeach
             </select>
 
             <!-- Ingresar fecha -->
@@ -45,7 +49,9 @@
             <!-- Select para tipo Rendimiento -->
             <select name="tipo_rendimiento" class="form-select form-select-lg mb-3" aria-label="Large select example">
                 <option selected>Seleccione tipo de Rendimiento</option>
-                <option value="1">One</option>
+                @foreach($rendimiento as $rendimientos)
+                <option value="{{$rendimientos->id}}">{{$rendimientos->tipo_rendimiento}}</option>
+                @endforeach
                 <!-- Agregar más opciones si es necesario -->
             </select>
 
@@ -65,30 +71,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#buscar-empleado').on('input', function () {
-            var search = $(this).val();
-            if (search.length >= 2) {
-                $.ajax({
-                    url: "{{ route('buscar.empleados') }}",
-                    type: "GET",
-                    data: { search: search },
-                    dataType: 'json',
-                    success: function (res) {
-                        $('#resultado-empleados').empty();
-                        $.each(res, function (key, value) {
-                            $('#resultado-empleados').append('<option value="' + value.id + '">' + value.nombre + ' ' + value.apellido + '</option>');
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error en la solicitud AJAX:', xhr.responseText);
-                    }
-                });
-            } else {
-                $('#resultado-empleados').empty();
-            }
-        });
-    });
+   
         $('#actividad').on('change', function () {
             var actividadId = this.value;
             $("#sub-actividad").html('');

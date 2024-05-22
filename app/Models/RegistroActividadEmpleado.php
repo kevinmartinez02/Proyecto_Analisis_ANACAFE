@@ -17,4 +17,5 @@ class RegistroActividadEmpleado extends Model
         'id_rendimiento',
         'observaciones'
     ];
+    protected $table = 'registro_actividades_empleados';
 }
