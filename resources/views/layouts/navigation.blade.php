@@ -26,7 +26,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{route('registro.actividad.empleado')}}">Personal Fijo</a></li>
-                                    <li><a class="dropdown-item" href="#">Personal Eventual</a></li>
+                                    <li><a class="dropdown-item" href="{{route('registro.actividad.empleado.eventual')}}">Personal Eventual</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">

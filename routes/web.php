@@ -53,6 +53,7 @@ Route::get('/empleados/mostrarEmpleados', [EmpleadosController::class, 'mostrarE
 //ruta para ingresdr actividades y usuarios
 
 Route::get('/actividades/registro', [RegistroActividadEmpleadoController::class, 'registrarActividadEmpleado'])->name('registro.actividad.empleado');
+Route::get('/actividades/registroEventual',[RegistroActividadEmpleadoController::class,'registrarActividadEmpleadoEventual'])->name('registro.actividad.empleado.eventual');
 Route::post('/api/fetch-subactividades', [RegistroActividadEmpleadoController::class, 'fetchSubActividades'])->name('fetch.subactividades');
 Route::post('/actividades/registroEmpleado/store',[RegistroActividadEmpleadoController::class,'registroStore'])->name('registro.actividad.store');
 

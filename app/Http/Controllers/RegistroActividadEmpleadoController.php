@@ -50,7 +50,17 @@ class RegistroActividadEmpleadoController extends Controller
         $newActividadEmpleado->save();
         return redirect()->back()->with('success', 'Actividad registrado correctamente');
     }
-    
+    public function registrarActividadEmpleadoEventual()
+    {
+        $rendimiento = TipoRendimiento::all();
+        $empleados = Empleado::whereHas('tipoEmpleado', function ($query) {
+            $query->where('tipo_empleado', 'Eventual');
+        })->get();
+        $actividades = Actividad::all();
+        $lotes = Lote::all(); // Asumiendo que también tienes un modelo Lote
+        return view('formularios.formRegistroActividadEventual', compact('actividades', 'lotes','empleados','rendimiento'));
+    }
+
     
     //
     
