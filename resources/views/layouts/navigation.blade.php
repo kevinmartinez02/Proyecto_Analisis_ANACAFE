@@ -34,9 +34,7 @@
                                 Reportes
                                 </a>
                                 <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Semanal</a></li>
-                                <li><a class="dropdown-item" href="#">Quincenal</a></li>
-                                <li><a class="dropdown-item" href="#">Mensual</a></li>
+                                <li><a class="dropdown-item" href="{{route('reportes')}}">Reporte</a></li>
                                 </ul>
                         </li>
                         <li class="nav-item dropdown">

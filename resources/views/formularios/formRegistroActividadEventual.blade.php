@@ -3,8 +3,8 @@
 
 <form method="POST" action="{{ route('registro.actividad.store')}}">
     @csrf
-    <div class="container text-center mt-5">
-        <label for="">Registrar actividades Eventual</label>
+    <div class="date-container text-center mt-5">
+        <label for="">Registrar actividades  personal eventual</label>
         <div class="col-md-6 offset-md-3">
             <!-- Campo de búsqueda de empleado -->
             

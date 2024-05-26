@@ -23,6 +23,10 @@ Route::get('/', function () {
     return view('PageMain');
 });
 
+Route::get('/reportes',function() {
+    return view('consultas.reportes');
+})->middleware('auth')->name('reportes');
+
 
 Route::get('/inicio',function() {
     return view('inicio');
