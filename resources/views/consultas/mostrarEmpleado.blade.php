@@ -1,22 +1,24 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 
-<div class="container">
-    <h1>Lista de Empleados</h1>
+<div class="container text-center">
+    <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Listado de empleados</h1>
 
     <!-- Búsqueda -->
     <form action="{{ route('mostrar.empleados') }}" method="GET" class="mb-3" id="form-filtrar">
-        <div class="row">
-            <div class="col-md-6">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido" value="{{ request('search') }}">
+        <div class="date-container">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o apellido" value="{{ request('search') }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" id="mostrar-todos">Mostrar todos</button>
+                </div>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary" id="mostrar-todos">Mostrar todos</button>
-            </div>
-        </div>
+        </div>    
     </form>
 
     <script>
