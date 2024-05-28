@@ -12,4 +12,11 @@ class EstadoEmpleado extends Model
         'estado',
         'id_empleado'
     ];
+    protected $table = 'estado_empleados';
+
+    // Relación inversa con el modelo Empleado
+    public function empleado()
+    {
+        return $this->belongsTo(Empleado::class, 'id_empleado');
+    }
 }

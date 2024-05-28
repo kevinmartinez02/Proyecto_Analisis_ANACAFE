@@ -56,18 +56,44 @@ class EmpleadosController extends Controller
         public function mostrarEmpleados(Request $request)
         {
             $query = $request->input('search');
-        
-            // Si hay un término de búsqueda, filtrar los empleados
-            if ($query) {
-                $empleados = Empleado::where('nombre', 'LIKE', "%{$query}%")
-                    ->orWhere('apellido', 'LIKE', "%{$query}%")
+
+         // Si hay un término de búsqueda, filtrar los empleados
+                 if ($query) {
+                         $empleados = Empleado::with('estado')
+                         ->where('nombre', 'LIKE', "%{$query}%")
+                        ->orWhere('apellido', 'LIKE', "%{$query}%")
                     ->get();
-            } else {
-                // Si no hay un término de búsqueda, mostrar todos los empleados
-                $empleados = Empleado::all();
-            }
-        
+                } else {
+                     // Si no hay un término de búsqueda, mostrar todos los empleados
+                        $empleados = Empleado::with('estado')->get();
+                    }
+            
             return view('consultas.mostrarEmpleado', compact('empleados'));
+        }
+
+        public function mostrarModificarDatosEmpleado($id){
+            $empleado = Empleado::find($id);
+            $tipos_empleados = TipoEmpleado::all();
+            return view('formularios.modificarDatosEmpleados',compact('empleado','tipos_empleados'));
+        }
+        public function actualizarDatosEmpleado(Request $request,$id){
+            $request->validate([
+                
+                'tipo_empleado' => 'required|exists:tipo_empleados,id', // Validación del tipo de empleado
+
+            ]);
+            
+            $empleadoEncontrado = Empleado::findOrFail($id);
+            $empleadoEncontrado->nombre = $request->nombre;
+            $empleadoEncontrado->apellido = $request->apellido;
+            $empleadoEncontrado->id_tipo_empleado = $request->input('tipo_empleado');
+            $empleadoEncontrado->dpi = $request->dpi;
+            $empleadoEncontrado->numeroIGSS = $request->numeroIGSS;
+            $empleadoEncontrado->nit = $request->nit;
+            $empleadoEncontrado->direccion = $request->direccion;
+            $empleadoEncontrado->numeroTelefono = $request->numeroTelefono;
+            $empleadoEncontrado->save();
+            return redirect()->back()->with('success', 'Empleado Actualizado correctamente');
         }
         
         

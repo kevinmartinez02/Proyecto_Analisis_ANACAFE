@@ -56,7 +56,9 @@ Route::get('/actividades/registro', [RegistroActividadEmpleadoController::class,
 Route::get('/actividades/registroEventual',[RegistroActividadEmpleadoController::class,'registrarActividadEmpleadoEventual'])->name('registro.actividad.empleado.eventual');
 Route::post('/api/fetch-subactividades', [RegistroActividadEmpleadoController::class, 'fetchSubActividades'])->name('fetch.subactividades');
 Route::post('/actividades/registroEmpleado/store',[RegistroActividadEmpleadoController::class,'registroStore'])->name('registro.actividad.store');
-
+//ruta pruebas
+Route::get('/empleados/{id}/actualizarDatos',[EmpleadosController::class,'mostrarModificarDatosEmpleado'])->name('mostrar.empleado.modificar');
+Route::put('/empleados/{id}/actualizar/update',[EmpleadosController::class,'actualizarDatosEmpleado'])->name('update.empleado');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

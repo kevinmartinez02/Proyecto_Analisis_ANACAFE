@@ -40,6 +40,8 @@
                 <th>No. NIT</th>
                 <th>Direccion</th>
                 <th>Telefono</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -53,8 +55,55 @@
                 <td>{{ $empleado->nit }}</td>
                 <td>{{ $empleado->direccion }}</td>
                 <td>{{ $empleado->numeroTelefono}}</td>
+                <td class="estado-{{ $empleado->id }}">{{ $empleado->estado ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <!-- Botón para cambiar el estado -->
+                    <button type="button" class="btn btn-sm cambiar-estado {{ $empleado->estado ? 'btn-danger' : 'btn-success' }}" data-empleado-id="{{ $empleado->id }}">
+                        {{ $empleado->estado ? 'Desactivar' : 'Activar' }}
+                    </button>
+                </td>
+                <td>
+                    <a href="{{ route('mostrar.empleado.modificar', $empleado->id) }}" class="btn btn-warning">Modificar</a>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Escuchar el clic en el botón para cambiar el estado del empleado
+    document.querySelectorAll('.cambiar-estado').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Obtener el ID del empleado
+            const empleadoId = this.dataset.empleadoId;
+            const btn = this;
+
+            // Enviar la solicitud AJAX al servidor
+            axios.put('{{ route('update.estado.empleado') }}', {
+                empleado_id: empleadoId,
+                _token: '{{ csrf_token() }}' // Añadir CSRF token
+            })
+            .then(function(response) {
+                // Actualizar el estado en la interfaz de usuario
+                const estado = response.data.estado;
+                const estadoText = estado === 'Activo' ? 'Desactivar' : 'Activar';
+                btn.textContent = estadoText;
+                btn.classList.toggle('btn-success', estado === 'Inactivo');
+                btn.classList.toggle('btn-danger', estado === 'Activo');
+                document.querySelector('.estado-' + empleadoId).textContent = estado;
+                // Opcional: mostrar un mensaje de éxito
+                toastr.success('Estado del empleado actualizado exitosamente.');
+            })
+            .catch(function(error) {
+                // Manejar cualquier error
+                console.error('Error:', error);
+                // Opcional: mostrar un mensaje de error
+                toastr.error('Error al actualizar el estado del empleado.');
+            });
+        });
+    });
+});
+</script>
+
