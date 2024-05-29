@@ -1,5 +1,6 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
+
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -9,15 +10,15 @@
         </ul>
     </div>
 @endif
+
 @section('head')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Include Select2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    
-    
 @endsection
+
 <form method="POST" action="{{ route('registro.actividad.empleado.store') }}">
     @csrf
     <div class="container-md text-center mt-4">
@@ -31,6 +32,17 @@
 
                 <div class="container-lg row align-items-start">
                     <div class="col-md-6 offset-md-3">
+                        <!-- Select para Tipo de Empleado -->
+                        <div class="form-floating mb-3">
+                            <select id="tipo-empleado" class="form-select form-select-lg mb-3" aria-label="Large select example" style="font-size: 18px;">
+                                <option selected>Seleccione tipo de empleado</option>
+                                @foreach($tipoEmpleados as $tipoEmpleado)
+                                    <option value="{{ $tipoEmpleado->id }}">{{ $tipoEmpleado->tipo_empleado }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Select para Empleado -->
                         <div class="form-floating mb-3">
                             <select name="empleado_id" id="empleado" class="form-select form-select-lg mb-3" aria-label="Large select example" style="font-size: 18px;">
                                 <option selected>Seleccione un empleado</option>
@@ -50,7 +62,7 @@
                             <select name="lote_id" class="form-select form-select-lg mb-3" aria-label="Large select example" style="font-size: 18px;">
                                 <option selected>Seleccione el Lote</option>
                                 @foreach($lotes as $lote)
-                                <option value="{{ $lote->id }}">{{ $lote->nombreLote }}</option>
+                                    <option value="{{ $lote->id }}">{{ $lote->nombreLote }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,7 +71,7 @@
                             <select id="actividad" name="actividad_id" class="form-select form-select-lg mb-3" aria-label="Large select example" style="font-size: 18px;">
                                 <option selected>Seleccione Actividad</option>
                                 @foreach($actividades as $actividad)
-                                <option value="{{ $actividad->id }}">{{ $actividad->nombreActividad }}</option>
+                                    <option value="{{ $actividad->id }}">{{ $actividad->nombreActividad }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -74,7 +86,7 @@
                             <select name="tipo_rendimiento" class="form-select form-select-lg mb-3" aria-label="Large select example" style="font-size: 18px;">
                                 <option selected>Seleccione tipo de Rendimiento</option>
                                 @foreach($rendimiento as $rendimientos)
-                                <option value="{{ $rendimientos->id }}">{{ $rendimientos->tipo_rendimiento }}</option>
+                                    <option value="{{ $rendimientos->id }}">{{ $rendimientos->tipo_rendimiento }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -93,11 +105,56 @@
         </section>
     </div>
 </form>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
+        // Cambio en el select de tipo de empleado
+        $('#tipo-empleado').on('change', function() {
+            var tipoEmpleadoId = this.value;
+            $("#empleado").html('');
+            $.ajax({
+                url: "{{ route('fetch.empleados') }}",
+                type: "POST",
+                data: {
+                    tipo_empleado_id: tipoEmpleadoId,
+                    _token: '{{csrf_token()}}'
+                },
+                dataType: 'json',
+                success: function (res) {
+                    $('#empleado').html('<option value="">Seleccione un empleado</option>');
+                    $.each(res, function (key, value) {
+                        $("#empleado").append('<option value="' + value.id + '">' + value.text + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Inicialización de select2 para empleado con búsqueda
+        $('#empleado').select2({
+            placeholder: 'Seleccione un empleado',
+            minimumInputLength: 2,
+            ajax: {
+                url: "{{ route('fetch.empleados') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        tipo_empleado_id: $('#tipo-empleado').val(),
+                        _token: '{{csrf_token()}}'
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // Cambio en el select de actividad
         $('#actividad').on('change', function () {
             var actividadId = this.value;
             $("#sub-actividad").html('');
@@ -117,73 +174,5 @@ $(document).ready(function() {
                 }
             });
         });
-        $('#empleado').select2({
-        placeholder: 'Seleccione un empleado',
-        minimumInputLength: 2,
-        ajax: {
-            url: "{{ route('fetch.empleados') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    q: params.term,
-                    _token: '{{csrf_token()}}'
-                };
-            },
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        }
-    }).on('select2:select', function (e) {
-        var data = e.params.data;
-        $(this).val(data.id).trigger('change');
     });
-
-        /*$('#empleado').select2({
-            placeholder: 'Seleccione un empleado',
-            minimumInputLength: 2,
-            ajax: {
-                url: "{{ route('fetch.empleados') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term,
-                        _token: '{{csrf_token()}}'
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
-        $('#empleado').select2({
-            placeholder: 'Seleccione un empleado',
-            minimumInputLength: 2,
-            ajax: {
-                url: "{{ route('fetch.empleados') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term,
-                        _token: '{{csrf_token()}}'
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });*/
-    });
-   
 </script>

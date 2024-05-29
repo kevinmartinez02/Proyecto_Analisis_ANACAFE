@@ -26,8 +26,9 @@ class RegistroActividadEmpleadoController extends Controller
     })->get();
     $actividades = Actividad::all();
     $lotes = Lote::all(); // Asumiendo que también tienes un modelo Lote
+    $tipoEmpleados = TipoEmpleado::all();
     
-    return view('formularios.registroActividad', compact('actividades', 'lotes', 'empleados', 'rendimiento'));
+    return view('formularios.registroActividad', compact('actividades', 'lotes', 'empleados', 'rendimiento','tipoEmpleados'));
         /*$rendimiento = TipoRendimiento::all();
         $empleados = Empleado::whereHas('tipoEmpleado', function ($query) {
             $query->where('tipo_empleado', 'Fijo');
@@ -118,6 +119,7 @@ class RegistroActividadEmpleadoController extends Controller
          $lotes = Lote::all();
          $actividades = Actividad::all();
          $rendimiento = TipoRendimiento::all();
+        
          // Ahora puedes pasar este registro a tu vista de edición
          return view('formularios.modificarRegistroActividadEmpleado', compact('registro','lotes','actividades','rendimiento'));
     

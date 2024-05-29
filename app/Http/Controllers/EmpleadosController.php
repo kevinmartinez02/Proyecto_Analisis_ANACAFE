@@ -134,7 +134,7 @@ class EmpleadosController extends Controller
 
    
         public function fetchEmpleados(Request $request)
-        {
+        {/*
             // Obtiene el parámetro de búsqueda enviado por Select2
             $search = $request->input('q');
     
@@ -153,7 +153,30 @@ class EmpleadosController extends Controller
             }
     
             // Devuelve la respuesta en formato JSON
-            return response()->json($response);
+            return response()->json($response);*/
+             // Obtiene el parámetro de búsqueda enviado por Select2
+    $search = $request->input('q');
+    $tipoEmpleadoId = $request->input('tipo_empleado_id');
+    
+    // Realiza la consulta en la base de datos para encontrar empleados que coincidan con el término de búsqueda y el tipo de empleado
+    $empleados = Empleado::where('id_tipo_empleado', $tipoEmpleadoId)
+                         ->where(function($query) use ($search) {
+                             $query->where('nombre', 'LIKE', "%{$search}%")
+                                   ->orWhere('apellido', 'LIKE', "%{$search}%");
+                         })
+                         ->get();
+
+    // Prepara los datos en el formato requerido por Select2
+    $response = [];
+    foreach ($empleados as $empleado) {
+        $response[] = [
+            'id' => $empleado->id,
+            'text' => $empleado->nombre . ' ' . $empleado->apellido
+        ];
+    }
+
+    // Devuelve la respuesta en formato JSON
+    return response()->json($response);
         }
     }
         
