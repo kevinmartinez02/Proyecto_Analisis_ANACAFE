@@ -34,7 +34,7 @@
                                 Reportes
                                 </a>
                                 <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('reportes')}}">Reporte</a></li>
+                                <li><a class="dropdown-item" href="{{route('mostrar.actividades.empleado')}}">Reporte</a></li>
                                 </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -55,7 +55,8 @@
                                 <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{route('mostrar.empleados')}}">Mostrar empleados</a></li>
                                 
-                                <li><a class="dropdown-item" href="{{route('mostrar.estados.empleados')}}">Estado de empleado</a></li>
+                                <li><a class="dropdown-item" href="{{route('mostrar.actividades')}}">Mostrar Actividades</a></li>
+                                <li><a class="dropdown-item" href="{{route('mostrar.lotes')}}">Mostrar Lotes </a></li>
                                 </ul>
                         </li>
                         </ul>

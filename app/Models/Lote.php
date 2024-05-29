@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\RegistroActividadEmpleado;
 
 class Lote extends Model
 {
@@ -12,4 +13,8 @@ class Lote extends Model
                 'nombreLote',
                 'area'
     ];
+    public function registrosActividades()
+    {
+        return $this->hasMany(RegistroActividadEmpleado::class, 'id_lote');
+    }
 }

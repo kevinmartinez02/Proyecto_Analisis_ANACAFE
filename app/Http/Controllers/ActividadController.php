@@ -16,7 +16,9 @@ class ActividadController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'nombreActividad' => ['required', 'unique:actividads']
+            'nombreActividad' => ['required', 'unique:actividads'],
+           
+
         ]);
        $nombre_actividad = $request->input('nombreActividad');
         $subActividades = $request->input('nombreSubactividad');
@@ -38,4 +40,54 @@ class ActividadController extends Controller
 
         return redirect()->route('registro.actividad');
     }
+
+    public function mostrar(Request $request)
+    {
+        $search = $request->get('search', '');
+
+        $actividades = Actividad::with('subActividades')
+            ->where('nombreActividad', 'like', "%{$search}%")
+            ->get();
+
+        return view('consultas.mostrarActividades', compact('actividades'));
+    }
+
+    public function destroy($id)
+    {
+        $actividad = Actividad::findOrFail($id);
+        $actividad->delete();
+
+        return redirect()->route('mostrar.actividades')->with('success', 'Actividad eliminada correctamente.');
+    }
+    public function edit($id)
+    {
+        $actividad = Actividad::with('subActividades')->findOrFail($id);
+        return view('formularios.editActividades', compact('actividad'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+                'nombreActividad' =>'required'
+
+        ]);
+        $actividad = Actividad::findOrFail($id);
+        $actividad->nombreActividad = $request->nombreActividad;
+        $actividad->save();
+
+        // Borrar subactividades existentes
+        SubActividad::where('id_actividad', $id)->delete();
+
+        // Crear nuevas subactividades
+        foreach ($request->nombreSubactividad as $index => $nombreSubactividad) {
+            SubActividad::create([
+                'id_actividad' => $id,
+                'nombreActividad' => $nombreSubactividad,
+                'descripcion' => $request->descripcion[$index],
+            ]);
+        }
+
+        return redirect()->route('mostrar.actividades')->with('success', 'Actividad actualizada exitosamente.');
+    }
 }
+

@@ -72,6 +72,11 @@
 
                 <h1 style="color: green; font-family: Arial, sans-serif; font-size: 20px; font-weight: bold;" class="mt-4">Tipo empleado</h1>
                 
+                
+                    
+                <label>Tipo de Empleado Actual: </label> {{ $tipo_empleado_asociado->tipo_empleado }} <br>
+                         
+                
                 <select name="tipo_empleado" class="form-select form-select-lg mt-4" aria-label="Large select example" >
                 <option selected>Seleccionar tipo de empleado</option>
                     @foreach($tipos_empleados as $tipos)

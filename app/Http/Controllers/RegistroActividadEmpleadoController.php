@@ -16,14 +16,25 @@ use Illuminate\Support\Facades\DB;
 class RegistroActividadEmpleadoController extends Controller
 {
     public function registrarActividadEmpleado()
-    {
-        $rendimiento = TipoRendimiento::all();
+        
+
+    {    $rendimiento = TipoRendimiento::all();
+        $empleados = Empleado::whereHas('tipoEmpleado', function ($query) {
+        $query->where('tipo_empleado', 'Fijo');
+    })->whereHas('estado', function ($query) {
+        $query->where('estado', 'Activo');
+    })->get();
+    $actividades = Actividad::all();
+    $lotes = Lote::all(); // Asumiendo que también tienes un modelo Lote
+    
+    return view('formularios.registroActividad', compact('actividades', 'lotes', 'empleados', 'rendimiento'));
+        /*$rendimiento = TipoRendimiento::all();
         $empleados = Empleado::whereHas('tipoEmpleado', function ($query) {
             $query->where('tipo_empleado', 'Fijo');
         })->get();
         $actividades = Actividad::all();
         $lotes = Lote::all(); // Asumiendo que también tienes un modelo Lote
-        return view('formularios.registroActividad', compact('actividades', 'lotes','empleados','rendimiento'));
+        return view('formularios.registroActividad', compact('actividades', 'lotes','empleados','rendimiento'));*/
     }
 
     public function fetchSubActividades(Request $request)
@@ -32,6 +43,16 @@ class RegistroActividadEmpleadoController extends Controller
         return response()->json($subActividades);
     }
     public function registroStore(Request $request){
+        $request->validate([
+            'empleado_id' => 'required|exists:empleados,id',
+            'fecha' => 'required|date|after_or_equal:2020-01-01|before_or_equal:2026-12-31',
+            'lote_id' => 'required|exists:lotes,id',
+            'actividad_id' => 'required|exists:actividads,id',
+            'sub_actividad_id' => 'required|exists:sub_actividades,id',
+            'tipo_rendimiento' => 'required|exists:tipo_rendimientos,id',
+            'observaciones' => 'nullable|string|max:255'
+        ]);
+
         $empleadoId = $request->input('empleado_id');
         $fecha = $request->fecha;
         $loteId = $request->input('lote_id');
@@ -48,7 +69,7 @@ class RegistroActividadEmpleadoController extends Controller
         $newActividadEmpleado->id_rendimiento = $rendimientoId;
         $newActividadEmpleado->observaciones = $description;
         $newActividadEmpleado->save();
-        return redirect()->back()->with('success', 'Actividad registrado correctamente');
+        return redirect()->route('registro.actividad.empleado')->with('success', 'Actividad registrado correctamente');
     }
     public function registrarActividadEmpleadoEventual()
     {
@@ -61,8 +82,70 @@ class RegistroActividadEmpleadoController extends Controller
         return view('formularios.formRegistroActividadEventual', compact('actividades', 'lotes','empleados','rendimiento'));
     }
 
+    public function mostrarRegistrosActividades(Request $request)
+{ // Obtener los registros de actividades
+    $registros = RegistroActividadEmpleado::with('empleado', 'lote', 'actividad', 'subActividad', 'rendimiento');
+
+    // Filtrar por nombre de empleado si se proporciona
+    if ($request->has('search')) {
+        $registros->whereHas('empleado', function ($query) use ($request) {
+            $query->where('nombre', 'LIKE', "%{$request->input('search')}%");
+        });
+    }
+
+    // Filtrar por rango de fechas si se proporciona
+    if ($request->filled('start-date') && $request->filled('end-date')) {
+        $registros->whereBetween('fecha', [$request->input('start-date'), $request->input('end-date')]);
+    }
+
+    // Obtener los registros después de aplicar los filtros
+    $registros = $registros->get();
+
+    // Retornar la vista con los registros de actividades
+    if ($request->expectsJson()) {
+        return response()->json(view('consultas.tabla_registros', compact('registros'))->render());
+    } else {
+        return view('consultas.reportes', compact('registros'));
+    }
+    }
+
+    public function mostrarEditRegistro($id){
+         // Obtener el registro de actividad de empleado que se desea editar
+         $registro = RegistroActividadEmpleado::findOrFail($id);
+
+         // Puedes acceder directamente a las relaciones relacionadas del registro de actividad de empleado
+         $registro->load('empleado', 'lote', 'actividad', 'subActividad', 'rendimiento');
+         $lotes = Lote::all();
+         $actividades = Actividad::all();
+         $rendimiento = TipoRendimiento::all();
+         // Ahora puedes pasar este registro a tu vista de edición
+         return view('formularios.modificarRegistroActividadEmpleado', compact('registro','lotes','actividades','rendimiento'));
     
-    //
+    }
+
+    public function edit(Request $request, $id){
+
+        $request->validate([
+            'fecha' => 'required',
+            'lote_id' =>'required',
+            'actividad_id' => 'required',
+            'sub_actividad_id' =>'required',
+            'tipo_rendimiento' => 'required',
+            'observaciones' => 'required',
+        ]);
     
-  
+        $registro = RegistroActividadEmpleado::findOrFail($id);
+        $registro->fecha = $request->fecha;
+        $registro->id_lote = $request->lote_id;
+        $registro->id_actividad = $request->actividad_id;
+        $registro->id_sub_actividad = $request->sub_actividad_id;
+        $registro->id_rendimiento = $request->tipo_rendimiento;
+        $registro->observaciones = $request->observaciones;
+        $registro->save();
+    
+        return redirect()->route('mostrar.actividades.empleado')->with('success', 'Actualizado Correctamente');
+    }
 }
+
+  
+

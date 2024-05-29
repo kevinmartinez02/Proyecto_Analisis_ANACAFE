@@ -23,6 +23,7 @@ return array(
     'App\\Http\\Controllers\\EstadosController' => $baseDir . '/app/Http/Controllers/EstadosController.php',
     'App\\Http\\Controllers\\LotesController' => $baseDir . '/app/Http/Controllers/LotesController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
+    'App\\Http\\Controllers\\RegistroActividadEmpleadoController' => $baseDir . '/app/Http/Controllers/RegistroActividadEmpleadoController.php',
     'App\\Http\\Controllers\\SubActividadController' => $baseDir . '/app/Http/Controllers/SubActividadController.php',
     'App\\Http\\Controllers\\mainController' => $baseDir . '/app/Http/Controllers/mainController.php',
     'App\\Http\\Controllers\\saveDBase' => $baseDir . '/app/Http/Controllers/saveDBase.php',

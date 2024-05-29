@@ -10,7 +10,7 @@ class EstadosController extends Controller
 {
     //
 
-    public function mostrarEstadoEmpleados(){
+    public function mostrarEstadoEmpleados(Request $request){
         /*$estados = empleados::join('estado_empleados', 'empleados.id', '=', 'estado_empleados.id_empleado')
         ->select('empleados.*', 'estado_empleados.estado')
         ->get();
@@ -18,7 +18,7 @@ class EstadosController extends Controller
     // Pasar los datos a la vista
     return view('consultas.estados', compact('estados'));*/
       // Obtener el término de búsqueda, si se proporciona
-      $search = request('search');
+      /*$search = $request('search');
 
       // Construir la consulta para obtener los empleados con sus estados correspondientes
       $query = Empleado::join('estado_empleados', 'empleados.id', '=', 'estado_empleados.id_empleado')
@@ -36,11 +36,28 @@ class EstadosController extends Controller
       $estados = $query->get();
   
       // Pasar los datos a la vista
-      return view('consultas.estados', compact('estados'));
+      return view('consultas.estados', compact('estados'));*/
+
+    
      }
      
      public function updateEstado(Request $request)
     {
+        $request->validate([
+            'empleado_id' => 'required|integer|exists:empleados,id',
+        ]);
+    
+        $estadoEmpleado = EstadoEmpleado::where('id_empleado', $request->empleado_id)->first();
+    
+        if ($estadoEmpleado) {
+            $nuevoEstado = $estadoEmpleado->estado === 'Activo' ? 'Inactivo' : 'Activo';
+            $estadoEmpleado->update(['estado' => $nuevoEstado]);
+    
+            return response()->json(['estado' => $nuevoEstado]);
+        }
+    
+        return response()->json(['error' => 'Empleado no encontrado'], 404);
+        /*
         $empleadoId = $request->input('empleado_id');
         $estadoEmpleado = EstadoEmpleado::where('id_empleado', $empleadoId)->firstOrFail();
 
@@ -49,7 +66,7 @@ class EstadosController extends Controller
         $estadoEmpleado->save();
 
         // Retornar el estado actualizado como respuesta
-        return response()->json(['estado' => $estadoEmpleado->estado]);
+        return response()->json(['estado' => $estadoEmpleado->estado]);*/
     }
 
         

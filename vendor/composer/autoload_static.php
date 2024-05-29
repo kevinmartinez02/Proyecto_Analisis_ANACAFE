@@ -553,6 +553,7 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Http\\Controllers\\EstadosController' => __DIR__ . '/../..' . '/app/Http/Controllers/EstadosController.php',
         'App\\Http\\Controllers\\LotesController' => __DIR__ . '/../..' . '/app/Http/Controllers/LotesController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
+        'App\\Http\\Controllers\\RegistroActividadEmpleadoController' => __DIR__ . '/../..' . '/app/Http/Controllers/RegistroActividadEmpleadoController.php',
         'App\\Http\\Controllers\\SubActividadController' => __DIR__ . '/../..' . '/app/Http/Controllers/SubActividadController.php',
         'App\\Http\\Controllers\\mainController' => __DIR__ . '/../..' . '/app/Http/Controllers/mainController.php',
         'App\\Http\\Controllers\\saveDBase' => __DIR__ . '/../..' . '/app/Http/Controllers/saveDBase.php',

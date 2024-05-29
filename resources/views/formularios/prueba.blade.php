@@ -1,23 +1,6 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@section('head')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <!-- Include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Include Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    
-    
-@endsection
+
 <form method="POST" action="{{ route('registro.actividad.empleado.store') }}">
     @csrf
     <div class="container-md text-center mt-4">
@@ -95,9 +78,8 @@
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
         $('#actividad').on('change', function () {
             var actividadId = this.value;
             $("#sub-actividad").html('');
@@ -117,32 +99,8 @@ $(document).ready(function() {
                 }
             });
         });
-        $('#empleado').select2({
-        placeholder: 'Seleccione un empleado',
-        minimumInputLength: 2,
-        ajax: {
-            url: "{{ route('fetch.empleados') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    q: params.term,
-                    _token: '{{csrf_token()}}'
-                };
-            },
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        }
-    }).on('select2:select', function (e) {
-        var data = e.params.data;
-        $(this).val(data.id).trigger('change');
-    });
 
-        /*$('#empleado').select2({
+        $('#empleado').select2({
             placeholder: 'Seleccione un empleado',
             minimumInputLength: 2,
             ajax: {
@@ -157,33 +115,16 @@ $(document).ready(function() {
                 },
                 processResults: function (data) {
                     return {
-                        results: data
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.nombre + ' ' + item.apellido,
+                                id: item.id
+                            };
+                        })
                     };
                 },
                 cache: true
             }
         });
-        $('#empleado').select2({
-            placeholder: 'Seleccione un empleado',
-            minimumInputLength: 2,
-            ajax: {
-                url: "{{ route('fetch.empleados') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term,
-                        _token: '{{csrf_token()}}'
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });*/
     });
-   
 </script>

@@ -42,8 +42,11 @@
                 <th>No. NIT</th>
                 <th>Direccion</th>
                 <th>Telefono</th>
+                <th>Tipo Empleado</th>
                 <th>Estado</th>
                 <th>Acciones</th>
+                <th>Modificar Datos</th>
+                <th>Eliminar</th> <!-- Añadir columna para eliminar -->
             </tr>
         </thead>
         <tbody>
@@ -57,6 +60,7 @@
                 <td>{{ $empleado->nit }}</td>
                 <td>{{ $empleado->direccion }}</td>
                 <td>{{ $empleado->numeroTelefono}}</td>
+                <td>{{$empleado->tipoEmpleado->tipo_empleado}}</td>
                 <td class="estado-{{ $empleado->id }}">{{ $empleado->estado ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     <!-- Botón para cambiar el estado -->
@@ -67,41 +71,38 @@
                 <td>
                     <a href="{{ route('mostrar.empleado.modificar', $empleado->id) }}" class="btn btn-warning">Modificar</a>
                 </td>
+                <td>
+                    <!-- Botón para eliminar el empleado -->
+                    <form action="{{ route('eliminar.empleado', $empleado->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este empleado?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Escuchar el clic en el botón para cambiar el estado del empleado
     document.querySelectorAll('.cambiar-estado').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            // Obtener el ID del empleado
             const empleadoId = this.dataset.empleadoId;
             const btn = this;
 
-            // Enviar la solicitud AJAX al servidor
             axios.put('{{ route('update.estado.empleado') }}', {
                 empleado_id: empleadoId,
-                _token: '{{ csrf_token() }}' // Añadir CSRF token
+                _token: '{{ csrf_token() }}'
             })
             .then(function(response) {
-                // Actualizar el estado en la interfaz de usuario
-                const estado = response.data.estado;
-                const estadoText = estado === 'Activo' ? 'Desactivar' : 'Activar';
-                btn.textContent = estadoText;
-                btn.classList.toggle('btn-success', estado === 'Inactivo');
-                btn.classList.toggle('btn-danger', estado === 'Activo');
-                document.querySelector('.estado-' + empleadoId).textContent = estado;
-                // Opcional: mostrar un mensaje de éxito
-                toastr.success('Estado del empleado actualizado exitosamente.');
+                // Recargar la página después de actualizar el estado
+                window.location.reload();
             })
             .catch(function(error) {
-                // Manejar cualquier error
                 console.error('Error:', error);
-                // Opcional: mostrar un mensaje de error
                 toastr.error('Error al actualizar el estado del empleado.');
             });
         });

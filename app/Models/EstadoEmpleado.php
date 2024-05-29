@@ -19,4 +19,5 @@ class EstadoEmpleado extends Model
     {
         return $this->belongsTo(Empleado::class, 'id_empleado');
     }
+    
 }
