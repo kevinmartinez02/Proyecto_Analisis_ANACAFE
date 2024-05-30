@@ -10,7 +10,9 @@ use App\Models\SubActividad;
 use App\Models\TipoRendimiento;
 use App\Models\TipoEmpleado;
 use App\Models\Empleado;
+use Barryvdh\DomPDF\Facade\PDF; 
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 class RegistroActividadEmpleadoController extends Controller
@@ -84,7 +86,9 @@ class RegistroActividadEmpleadoController extends Controller
     }
 
     public function mostrarRegistrosActividades(Request $request)
-{ // Obtener los registros de actividades
+{
+    
+    /*// Obtener los registros de actividades
     $registros = RegistroActividadEmpleado::with('empleado', 'lote', 'actividad', 'subActividad', 'rendimiento');
 
     // Filtrar por nombre de empleado si se proporciona
@@ -107,6 +111,60 @@ class RegistroActividadEmpleadoController extends Controller
         return response()->json(view('consultas.tabla_registros', compact('registros'))->render());
     } else {
         return view('consultas.reportes', compact('registros'));
+    }*/
+    // Obtener los registros de actividades
+    // Obtener los registros de actividades
+        
+        // Obtener los registros de actividades
+    $registros = RegistroActividadEmpleado::with('empleado', 'lote', 'actividad', 'subActividad', 'rendimiento');
+
+    // Filtrar por nombre de empleado si se proporciona
+    if ($request->has('search') && $request->input('search') !== '') {
+        $registros->whereHas('empleado', function ($query) use ($request) {
+            $query->where('nombre', 'LIKE', "%{$request->input('search')}%");
+        });
+    }
+
+    // Filtrar por rango de fechas si se proporciona
+    if ($request->filled('start-date') && $request->filled('end-date')) {
+        $registros->whereBetween('fecha', [$request->input('start-date'), $request->input('end-date')]);
+    }
+
+    // Filtrar por actividad si se proporciona
+    if ($request->filled('actividad')) {
+        $registros->whereHas('actividad', function ($query) use ($request) {
+            $query->where('nombreActividad', $request->input('actividad'));
+        });
+    }
+
+    // Filtrar por lote si se proporciona
+    if ($request->filled('lote')) {
+        $registros->whereHas('lote', function ($query) use ($request) {
+            $query->where('nombreLote', $request->input('lote'));
+        });
+    }
+
+    // Filtrar por rendimiento si se proporciona
+    if ($request->filled('rendimiento')) {
+        $registros->whereHas('rendimiento', function ($query) use ($request) {
+            $query->where('tipo_rendimiento', $request->input('rendimiento'));
+        });
+    }
+    $registros = $registros->orderBy('fecha', 'asc');
+
+    // Obtener los registros después de aplicar los filtros
+    $registros = $registros->get();
+
+    // Obtener actividades, lotes y rendimientos para los filtros
+    $actividades = Actividad::all();
+    $lotes = Lote::all();
+    $rendimientos = TipoRendimiento::all();
+   
+    // Retornar la vista con los registros de actividades
+    if ($request->expectsJson()) {
+        return response()->json(view('consultas.tabla_registros', compact('registros'))->render());
+    } else {
+        return view('consultas.reportes', compact('registros', 'actividades', 'lotes', 'rendimientos'));
     }
     }
 
@@ -146,6 +204,31 @@ class RegistroActividadEmpleadoController extends Controller
         $registro->save();
     
         return redirect()->route('mostrar.actividades.empleado')->with('success', 'Actualizado Correctamente');
+    }
+
+    public function  delete ($id){
+        $registro = RegistroActividadEmpleado::findorFail($id);
+        $registro->delete();
+        return redirect()->route('mostrar.actividades.empleado')->with('success','REgistro Eliminado Exitosamente');
+    }
+    public function generatePDF(Request $request)
+    { 
+        $startDate = $request->input('start-date');
+    $endDate = $request->input('end-date');
+
+    $registros = RegistroActividadEmpleado::with('empleado', 'lote', 'actividad', 'subActividad', 'rendimiento')
+        ->whereBetween('fecha', [$startDate, $endDate])
+        ->orderBy('fecha')
+        ->get()
+        ->groupBy(function($item) {
+            return Carbon::parse($item->fecha)->format('Y-m-d');
+        })
+        ->map(function($group) {
+            return $group->groupBy('empleado_id');
+        });
+
+    $pdf = PDF::loadView('reportePDF', compact('registros'));
+    return $pdf->download('reporte.pdf');
     }
 }
 

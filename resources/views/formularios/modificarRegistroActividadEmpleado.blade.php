@@ -11,6 +11,13 @@
     </div>
 @endif
 
+@if ($errors->has('nombreSubactividad'))
+    <div class="alert alert-danger">
+        <strong>¡Error!</strong> Debes ingresar al menos una subactividad.
+    </div>
+@endif
+
+
 <form method="POST" action="{{route('edit.registro.empleado', ['id' => $registro->id])}}">
     @csrf
     @method('PUT')
@@ -99,7 +106,7 @@
 
                 <!-- Botón para enviar información de Registro -->
                 <div style="text-align: center;" class="mt-4">
-                    <button type="submit" class="btn btn-primary" style="background-color: #7DAF49; border: 2px solid #7DAF49;">Registrar</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #7DAF49; border: 2px solid #7DAF49;">Actualizar</button>
                 </div>
             </div>
         </section>

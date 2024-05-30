@@ -17,9 +17,13 @@ class ActividadController extends Controller
 
         $request->validate([
             'nombreActividad' => ['required', 'unique:actividads'],
-           
-
+            'nombreSubactividad' => ['required_without_all:descripcion.*'],
+            'descripcion' => ['required_without_all:nombreSubactividad.*'],
+        ], [
+            'nombreSubactividad.required_without_all' => 'Debes ingresar al menos una subactividad',
+            'descripcion.required_without_all' => 'Debes ingresar al menos una descripción',
         ]);
+        
        $nombre_actividad = $request->input('nombreActividad');
         $subActividades = $request->input('nombreSubactividad');
         $subActividadesDescription = $request->input('descripcion');
@@ -38,7 +42,7 @@ class ActividadController extends Controller
             $sub->save();
         }
 
-        return redirect()->route('registro.actividad');
+        return redirect()->route('registro.actividad')->with('success','Actividad Registrada Exitosamente');
     }
 
     public function mostrar(Request $request)
@@ -68,9 +72,14 @@ class ActividadController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-                'nombreActividad' =>'required'
-
+            'nombreActividad' => ['required', 'unique:actividads'],
+            'nombreSubactividad' => ['required_without_all:descripcion.*'],
+            'descripcion' => ['required_without_all:nombreSubactividad.*'],
+        ], [
+            'nombreSubactividad.required_without_all' => 'Debes ingresar al menos una subactividad',
+            'descripcion.required_without_all' => 'Debes ingresar al menos una descripción',
         ]);
+        
         $actividad = Actividad::findOrFail($id);
         $actividad->nombreActividad = $request->nombreActividad;
         $actividad->save();

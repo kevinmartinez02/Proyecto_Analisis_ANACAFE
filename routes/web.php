@@ -7,6 +7,7 @@ use App\Http\Controllers\LotesController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\EstadosController;
 use App\Http\Controllers\RegistroActividadEmpleadoController;
+use App\Http\Controllers\ReporteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +76,7 @@ Route::get('/pruebas',function (){
     return view('formularios.prueba');
 });
 Route::get('/fetch-empleados', [EmpleadosController::class, 'fetchEmpleados'])->name('fetch.empleados');
-
+Route::get('/reporte', [RegistroActividadEmpleadoController::class, 'generatePDF'])->name('reporte.pdf');
 Route::get('/lotes',[LotesController::class,'mostrarLotes'])->name('mostrar.lotes');
 Route::get('/lotes/modificar/{id}',[LotesController::class,'updateLotes'])->name('modificar.lotes');
 Route::put('/lotes/{id}/update',[LotesController::class,'edit'])->name('update.lote');
@@ -83,6 +84,7 @@ Route::delete('/lotes/{id}/delete',[LotesController::class,'delete'])->name('eli
 
 Route::get('/reportes/{id}/update',[RegistroActividadEmpleadoController::class,'mostrarEditRegistro'])->name('mostrar.edit.registro.empleado');
 Route::put('/reportes/update/{id}',[RegistroActividadEmpleadoController::class,'edit'])->name('edit.registro.empleado');
+Route::delete('/reportes/{id}/delete',[RegistroActividadEmpleadoController::class,'delete'])->name('eliminar.registro.empleado');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

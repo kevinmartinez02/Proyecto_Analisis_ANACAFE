@@ -10,7 +10,11 @@
         </ul>
     </div>
 @endif
-
+@if ($errors->has('nombreSubactividad'))
+    <div class="alert alert-danger">
+        <strong>¡Error!</strong> Debes ingresar al menos una subactividad.
+    </div>
+@endif
 <form id="form" action="{{ $actividad->id ? route('actualizar.actividad', $actividad->id) : route('registro.actividad.store') }}" method="POST">
     @csrf
     @if($actividad->id)

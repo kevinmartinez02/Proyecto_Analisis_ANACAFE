@@ -22,7 +22,7 @@ class LotesController extends Controller
         $lote->nombreLote = $request->nombreLote;
         $lote->area = $request->area;
         $lote->save();
-        return redirect()->route('registro.lote');
+        return redirect()->route('registro.lote')->with('success','Lote Registrado Exitosamente');
     }
     public function mostrarLotes(Request $request){
         $search = $request->get('search', '');
