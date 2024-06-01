@@ -22,7 +22,7 @@
 <form method="POST" action="{{ route('registro.actividad.empleado.store') }}">
     @csrf
     <div class="container-md text-center mt-4">
-        <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Actividades Personal Eventual</h1>
+        <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Actividades Personal</h1>
 
         <section class="shadow-lg p-3 mb-5 bg-body-tertiary rounded mt-4">
             <div class="container-md text-center">
@@ -51,7 +51,7 @@
 
                         <div class="form-floating mb-3">
                             <input type="date" name="fecha" min="2020-01-01" max="2026-12-31" class="form-control" id="fecha" style="font-size: 18px;">
-                            <label for="fecha">Ingrese fecha de registro</label>
+                            <label for="fecha">Ingrese fecha de inicio</label>
                         </div>
 
                         <div class="form-floating mb-3" id="mensaje-flotante">

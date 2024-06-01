@@ -11,7 +11,23 @@ class EstadosController extends Controller
     //
 
     public function mostrarEstadoEmpleados(Request $request){
-        /*$estados = empleados::join('estado_empleados', 'empleados.id', '=', 'estado_empleados.id_empleado')
+        $search = $request->get('search');
+
+    $query = Empleado::query();
+
+    if ($search) {
+        $query->where(function($q) use ($search) {
+            $q->where('nombre', 'like', '%' . $search . '%')
+              ->orWhere('apellido', 'like', '%' . $search . '%');
+        });
+    }
+
+    // Assuming you have a relationship or directly in the 'empleados' table
+    $estados = $query->get();
+
+    return view('consultas.estados', compact('estados'));
+}
+       /* $estados = Empleado::join('estado_empleados', 'empleados.id', '=', 'estado_empleados.id_empleado')
         ->select('empleados.*', 'estado_empleados.estado')
         ->get();
 
@@ -39,11 +55,20 @@ class EstadosController extends Controller
       return view('consultas.estados', compact('estados'));*/
 
     
-     }
+     
      
      public function updateEstado(Request $request)
-    {
-        $request->validate([
+    {$request->validate([
+        'empleado_id' => 'required|integer|exists:empleados,id',
+    ]);
+
+    $empleado = Empleado::findOrFail($request->empleado_id);
+    $nuevoEstado = $empleado->estado === 'Activo' ? 'Inactivo' : 'Activo';
+    $empleado->estado = $nuevoEstado;
+    $empleado->save();
+
+    return response()->json(['estado' => $nuevoEstado]);
+        /*$request->validate([
             'empleado_id' => 'required|integer|exists:empleados,id',
         ]);
     
@@ -56,7 +81,7 @@ class EstadosController extends Controller
             return response()->json(['estado' => $nuevoEstado]);
         }
     
-        return response()->json(['error' => 'Empleado no encontrado'], 404);
+        return response()->json(['error' => 'Empleado no encontrado'], 404);*/
         /*
         $empleadoId = $request->input('empleado_id');
         $estadoEmpleado = EstadoEmpleado::where('id_empleado', $empleadoId)->firstOrFail();

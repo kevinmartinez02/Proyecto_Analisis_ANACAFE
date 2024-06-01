@@ -34,7 +34,7 @@
                                 Reportes
                                 </a>
                                 <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('mostrar.actividades.empleado')}}">Reporte</a></li>
+                                <li><a class="dropdown-item" href="{{route('mostrar.actividades.empleado')}}">Reporte de Actividades </a></li>
                                 </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -89,7 +89,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -99,7 +99,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar Sesion') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>

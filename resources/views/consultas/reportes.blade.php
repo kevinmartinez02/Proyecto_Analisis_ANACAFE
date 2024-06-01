@@ -1,11 +1,9 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 <head>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
-
 
 <div class="container text-center">
     <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Listado de Registros</h1>
@@ -25,12 +23,12 @@
                 </div>
             </div>
 
-    <!-- Botón para el reporte PDF -->
-    <div style="text-align: right; margin-bottom: 10px;">
-        <a href="{{ route('reporte.pdf', ['start-date' => request('start-date'), 'end-date' => request('end-date')]) }}" class="btn btn-success" title="Generar Reporte PDF">
-            <i class="fas fa-file-pdf"></i> Generar Reporte PDF
-        </a>
-    </div>
+            <!-- Botón para el reporte PDF -->
+            <div style="text-align: right; margin-bottom: 10px;">
+                <a href="{{ route('reporte.pdf', ['start-date' => request('start-date'), 'end-date' => request('end-date')]) }}" class="btn btn-success" title="Generar Reporte PDF">
+                    <i class="fas fa-file-pdf"></i> Generar Reporte PDF
+                </a>
+            </div>
 
             <div class="row mt-3">
                 <div class="col-md-2">
@@ -44,7 +42,7 @@
                 <div class="col-md-2">
                     <label for="actividad">Actividad:</label>
                     <select id="actividad" name="actividad" class="form-control">
-                        <option value="">Seleccione Actividad</option>
+                        <option value="">Seleccione</option>
                         @foreach($actividades as $actividad)
                             <option value="{{ $actividad->nombreActividad }}" {{ request('actividad') == $actividad->nombreActividad ? 'selected' : '' }}>
                                 {{ $actividad->nombreActividad }}
@@ -66,7 +64,7 @@
                 <div class="col-md-2">
                     <label for="rendimiento">Rendimiento:</label>
                     <select id="rendimiento" name="rendimiento" class="form-control">
-                        <option value="">Seleccione Rendimiento</option>
+                        <option value="">Seleccione</option>
                         @foreach($rendimientos as $rendimiento)
                             <option value="{{ $rendimiento->tipo_rendimiento }}" {{ request('rendimiento') == $rendimiento->tipo_rendimiento ? 'selected' : '' }}>
                                 {{ $rendimiento->tipo_rendimiento }}
@@ -82,6 +80,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Fecha</th>
                 <th>Nombre empleado</th>
                 <th>Lote</th>
@@ -94,7 +93,8 @@
         </thead>
         <tbody>
             @foreach($registros as $registro)
-                <tr>
+                <tr id="registro-{{ $registro->id }}">  
+                    <td>{{$registro->id}}</td>
                     <td>{{ $registro->fecha }}</td>
                     <td>{{ $registro->empleado->nombre }}</td>
                     <td>{{ $registro->lote->nombreLote }}</td>
@@ -107,76 +107,117 @@
                             <a href="{{ route('mostrar.edit.registro.empleado', $registro->id) }}" class="btn btn-warning action-btn" title="Modificar">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('eliminar.registro.empleado', $registro->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger action-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este registro?');" title="Eliminar">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+                            <button type="button" class="btn btn-danger action-btn eliminar-btn" data-id="{{ $registro->id }}" title="Eliminar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
             @endforeach
         </tbody>
+        <div class="px-6 py-3">
+            {{$registros->links()}}
+        </div>
     </table>
 </div>
 
 <style>
     .action-btn {
-        width: 40px; /* Ajusta este valor según sea necesario */
-        height: 40px; /* Ajusta este valor según sea necesario */
+        width: 40px;
+        height: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .action-btn i {
-        font-size: 18px; /* Ajusta el tamaño del icono según sea necesario */
+        font-size: 18px;
     }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    // Función para enviar una solicitud AJAX para filtrar registros por fechas
-    function filtrarRegistrosPorFechas() {
-        // Obtener los valores de fecha de inicio y fecha final
-        var startDate = document.getElementById('start-date').value;
-        var endDate = document.getElementById('end-date').value;
+axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrf_token() }}';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-        // Enviar una solicitud AJAX para obtener registros filtrados por el rango de fechas
-        axios.get('{{ route("mostrar.actividades.empleado") }}', {
-            params: {
-                'start-date': startDate,
-                'end-date': endDate
-            }
-        })
-        .then(function(response) {
-            // Actualizar la tabla con los registros filtrados
-            document.querySelector('.table tbody').innerHTML = response.data;
-        })
-        .catch(function(error) {
-            // Manejar errores
-            console.error('Error:', error);
+document.addEventListener('DOMContentLoaded', function() {
+    // Assign the click event to the delete buttons
+    document.querySelectorAll('.eliminar-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            eliminarRegistro(id);
         });
-    }
+    });
+});
 
-    // Escuchar el cambio en los campos de fecha para filtrar automáticamente los registros
-    document.getElementById('start-date').addEventListener('change', filtrarRegistrosPorFechas);
-    document.getElementById('end-date').addEventListener('change', filtrarRegistrosPorFechas);
+function eliminarRegistro(id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esto.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete(`/reportes/${id}/delete`)
+                .then(function(response) {
+                    if (response.status === 200) {
+                        Swal.fire(
+                            '¡Eliminado!',
+                            response.data.message,
+                            'success'
+                        );
+                        // Remove the row from the table
+                        document.getElementById(`registro-${id}`).remove();
+                    } else {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                })
+                .catch(function(error) {
+                    Swal.fire(
+                        'Error',
+                        'Hubo un problema al eliminar el registro.',
+                        'error'
+                    );
+                });
+        }
+    });
+}
 
-    // Función para limpiar los campos de fecha y mostrar todos los registros
-    function mostrarTodosLosRegistros() {
-        // Limpiar los campos de búsqueda y filtros
-        document.querySelector('input[name="search"]').value = '';
-        document.getElementById('start-date').value = '';
-        document.getElementById('end-date').value = '';
-        document.getElementById('actividad').value = '';
-        document.getElementById('lote').value = '';
-        document.getElementById('rendimiento').value = '';
+document.getElementById('mostrar-todos').addEventListener('click', function() {
+    document.querySelector('input[name="search"]').value = '';
+    document.getElementById('start-date').value = '';
+    document.getElementById('end-date').value = '';
+    document.getElementById('actividad').value = '';
+    document.getElementById('lote').value = '';
+    document.getElementById('rendimiento').value = '';
 
-        // Enviar el formulario para mostrar todos los registros
-        document.getElementById('form-filtrar').submit();
-    }
+    document.getElementById('form-filtrar').submit();
+});
 
-    // Escuchar el clic en el botón "Mostrar todos" para mostrar todos los registros
-    document.getElementById('mostrar-todos').addEventListener('click', mostrarTodosLosRegistros);
+// Function to send an AJAX request to filter records by dates
+function filtrarRegistrosPorFechas() {
+    var startDate = document.getElementById('start-date').value;
+    var endDate = document.getElementById('end-date').value;
+
+    axios.get('{{ route("mostrar.actividades.empleado") }}', {
+        params: {
+            'start-date': startDate,
+            'end-date': endDate
+        }
+    })
+    .then(function(response) {
+        document.querySelector('.table tbody').innerHTML = response.data;
+    })
+    .catch(function(error) {
+        console.error('Error:', error);
+    });
+}
+
+document.getElementById('start-date').addEventListener('change', filtrarRegistrosPorFechas);
+document.getElementById('end-date').addEventListener('change', filtrarRegistrosPorFechas);
 </script>

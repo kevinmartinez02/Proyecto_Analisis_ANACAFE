@@ -22,7 +22,8 @@ class EmpleadosController extends Controller
                 'dpi' => ['required', 'unique:empleados', 'size:13', 'regex:/^\d+$/'],
                 'nombre' => 'required',
                 'numeroIGSS' => ['required','size:13','regex:/^\d+$/'],
-                'nit' => ['required', 'unique:empleados' , 'size:9']
+                'nit' => ['required', 'unique:empleados' , 'size:9'],
+                'numeroTelefono' => 'required'
                 
             ]);
             $tipoEmpleadoId = $request->input('tipo_empleado');
@@ -59,7 +60,7 @@ class EmpleadosController extends Controller
     $empleados = Empleado::with(['estado','tipoEmpleado'])
         ->where('nombre', 'like', "%{$search}%")
         ->orWhere('apellido', 'like', "%{$search}%")
-        ->get();
+        ->paginate(10);
 
     return view('consultas.mostrarEmpleado', compact('empleados'));
            /* $query = $request->input('search');
@@ -129,7 +130,8 @@ class EmpleadosController extends Controller
         // Eliminar el empleado (los registros relacionados se eliminarán automáticamente)
         $empleado->delete();
 
-        return redirect()->back()->with('success', 'Empleado eliminado correctamente');
+        return response()->json(['success' => 'Empleado eliminado correctamente.']);
+        //return redirect()->back()->with('success', 'Empleado eliminado correctamente');
         }
 
    

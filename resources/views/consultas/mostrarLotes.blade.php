@@ -1,9 +1,9 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 <head>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <div class="container text-center">
     <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Listado de Lotes</h1>
@@ -27,9 +27,7 @@
 
     <script>
     document.getElementById('mostrar-todos').addEventListener('click', function() {
-        // Limpiar el valor del campo de búsqueda antes de enviar el formulario
         document.getElementById('form-filtrar').querySelector('input[name="search"]').value = '';
-        // Enviar el formulario
         document.getElementById('form-filtrar').submit();
     });
     </script>
@@ -38,15 +36,16 @@
     <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nombre Lote</th>
                 <th>Area (en Manzanas)</th>
                 <th>Acciones</th>
-         
             </tr>
         </thead>
         <tbody>
             @foreach ($lotes as $lote)
-            <tr>
+            <tr id="lote-{{ $lote->id }}">
+                <td>{{ $lote->id }}</td>
                 <td>{{ $lote->nombreLote }}</td>
                 <td>{{ $lote->area }}</td>
                 <td>
@@ -54,18 +53,17 @@
                         <a href="{{ route('modificar.lotes', $lote->id) }}" class="btn btn-warning action-btn" title="Modificar">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ route('eliminar.lote', $lote->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este Lote?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger action-btn" title="Eliminar">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-danger action-btn eliminar-lote" data-lote-id="{{ $lote->id }}" title="Eliminar">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </div>
                 </td>
             </tr>
             @endforeach
         </tbody>
+        <div class="px-6 py-3">
+            {{ $lotes->links() }}
+        </div>
     </table>
 </div>
 
@@ -84,3 +82,55 @@
         font-size: 18px; /* Ajusta el tamaño del icono según sea necesario */
     }
 </style>
+
+<script>
+axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrf_token() }}';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.eliminar-lote').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const loteId = this.dataset.loteId;
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esto.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete('{{ url("lotes") }}/' + loteId + '/delete', {
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(function(response) {
+                        if (response.status === 200) {
+                            Swal.fire(
+                                '¡Eliminado!',
+                                response.data.message,
+                                'success'
+                            );
+                            // Eliminar la fila de la tabla
+                            document.getElementById('lote-' + loteId).remove();
+                        } else {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                    })
+                    .catch(function(error) {
+                        Swal.fire(
+                            'Error',
+                            'Hubo un problema al eliminar el lote.',
+                            'error'
+                        );
+                    });
+                }
+            });
+        });
+    });
+});
+</script>

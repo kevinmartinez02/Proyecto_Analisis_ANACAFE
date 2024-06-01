@@ -51,18 +51,28 @@ class ActividadController extends Controller
 
         $actividades = Actividad::with('subActividades')
             ->where('nombreActividad', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
 
         return view('consultas.mostrarActividades', compact('actividades'));
     }
 
     public function destroy($id)
     {
-        $actividad = Actividad::findOrFail($id);
+        /*$actividad = Actividad::findOrFail($id);
         $actividad->delete();
 
-        return redirect()->route('mostrar.actividades')->with('success', 'Actividad eliminada correctamente.');
+        return redirect()->route('mostrar.actividades')->with('success', 'Actividad eliminada correctamente.');*/
+        try {
+            $actividad = Actividad::findOrFail($id);
+            $actividad->delete();
+
+            return response()->json(['message' => 'Actividad eliminada correctamente.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Hubo un problema al eliminar la actividad.'], 500);
+        }
     }
+        
+    
     public function edit($id)
     {
         $actividad = Actividad::with('subActividades')->findOrFail($id);
@@ -72,7 +82,7 @@ class ActividadController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nombreActividad' => ['required', 'unique:actividads'],
+            'nombreActividad' => 'required',
             'nombreSubactividad' => ['required_without_all:descripcion.*'],
             'descripcion' => ['required_without_all:nombreSubactividad.*'],
         ], [

@@ -2,7 +2,7 @@
 @include('layouts.navigation')
 
 <div class="container text-center">
-<h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Estado de empleado</h1>
+    <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Estado de empleado</h1>
 
     <!-- Búsqueda -->
     <form action="{{ route('mostrar.estados.empleados') }}" method="GET" class="mb-3" id="form-filtrar">
@@ -22,9 +22,7 @@
     </form>
     <script>
     document.getElementById('mostrar-todos').addEventListener('click', function() {
-        // Limpiar el valor del campo de búsqueda antes de enviar el formulario
         document.getElementById('form-filtrar').querySelector('input[name="search"]').value = '';
-        // Enviar el formulario
         document.getElementById('form-filtrar').submit();
     });
     </script>
@@ -37,7 +35,6 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Estado</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -46,11 +43,9 @@
                 <td>{{ $empleado->id }}</td>
                 <td>{{ $empleado->nombre }}</td>
                 <td>{{ $empleado->apellido }}</td>
-                <td class="estado-{{ $empleado->id }}">{{ $empleado->estado ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <!-- Botón para cambiar el estado -->
-                    <button type="button" class="btn btn-sm cambiar-estado {{ $empleado->estado ? 'btn-danger' : 'btn-success' }}" data-empleado-id="{{ $empleado->id }}">
-                        {{ $empleado->estado ? 'Desactivar' : 'Activar' }}
+                    <button type="button" class="btn btn-sm cambiar-estado {{ $empleado->estado === 'Activo' ? 'btn-danger' : 'btn-success' }}" data-empleado-id="{{ $empleado->id }}">
+                        {{ $empleado->estado }}
                     </button>
                 </td>
             </tr>
@@ -60,39 +55,32 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Escuchar el clic en el botón para cambiar el estado del empleado
     document.querySelectorAll('.cambiar-estado').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            // Obtener el ID del empleado
             const empleadoId = this.dataset.empleadoId;
             const btn = this;
 
-            // Enviar la solicitud AJAX al servidor
             axios.put('{{ route('update.estado.empleado') }}', {
                 empleado_id: empleadoId,
-                _token: '{{ csrf_token() }}' // Añadir CSRF token
+                _token: '{{ csrf_token() }}'
             })
             .then(function(response) {
-                // Actualizar el estado en la interfaz de usuario
                 const estado = response.data.estado;
-                const estadoText = estado === 'Activo' ? 'Desactivar' : 'Activar';
-                btn.textContent = estadoText;
+                btn.textContent = estado;
                 btn.classList.toggle('btn-success', estado === 'Inactivo');
                 btn.classList.toggle('btn-danger', estado === 'Activo');
-                document.querySelector('.estado-' + empleadoId).textContent = estado;
-                // Opcional: mostrar un mensaje de éxito
                 toastr.success('Estado del empleado actualizado exitosamente.');
             })
             .catch(function(error) {
-                // Manejar cualquier error
                 console.error('Error:', error);
-                // Opcional: mostrar un mensaje de error
                 toastr.error('Error al actualizar el estado del empleado.');
             });
         });
     });
 });
 </script>
-

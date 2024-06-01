@@ -84,7 +84,7 @@
 <form method="POST" action="{{ route('registro.actividad.empleado.store') }}">
     @csrf
     <div class="container-md text-center mt-4">
-        <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Actividades Personal Eventual</h1>
+        <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Registrar Actividades Personal</h1>
 
         <section class="shadow-lg p-3 mb-5 bg-body-tertiary rounded mt-4">
             <div class="container-md text-center">

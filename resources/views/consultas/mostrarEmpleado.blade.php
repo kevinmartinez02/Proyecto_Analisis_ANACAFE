@@ -1,9 +1,9 @@
 @extends('layouts.principal')
 @include('layouts.navigation')
 <head>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <div class="container text-center">
     <h1 style="color: green; font-family: Arial, sans-serif; font-size: 30px; font-weight: bold;">Listado de empleados</h1>
@@ -27,9 +27,7 @@
 
     <script>
     document.getElementById('mostrar-todos').addEventListener('click', function() {
-        // Limpiar el valor del campo de búsqueda antes de enviar el formulario
         document.getElementById('form-filtrar').querySelector('input[name="search"]').value = '';
-        // Enviar el formulario
         document.getElementById('form-filtrar').submit();
     });
     </script>
@@ -50,12 +48,11 @@
                 <th>Estado</th>
                 <th>Acciones</th>
                 <th>Modificar Datos</th>
-              
             </tr>
         </thead>
         <tbody>
             @foreach ($empleados as $empleado)
-            <tr>
+            <tr id="empleado-{{ $empleado->id }}">
                 <td>{{ $empleado->id }}</td>
                 <td>{{ $empleado->nombre }}</td>
                 <td>{{ $empleado->apellido }}</td>
@@ -64,10 +61,9 @@
                 <td>{{ $empleado->nit }}</td>
                 <td>{{ $empleado->direccion }}</td>
                 <td>{{ $empleado->numeroTelefono}}</td>
-                <td>{{$empleado->tipoEmpleado->tipo_empleado}}</td>
+                <td>{{ $empleado->tipoEmpleado->tipo_empleado }}</td>
                 <td class="estado-{{ $empleado->id }}">{{ $empleado->estado ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <!-- Botón para cambiar el estado -->
                     <button type="button" class="btn btn-sm cambiar-estado {{ $empleado->estado ? 'btn-danger' : 'btn-success' }}" data-empleado-id="{{ $empleado->id }}">
                         {{ $empleado->estado ? 'Desactivar' : 'Activar' }}
                     </button>
@@ -77,18 +73,17 @@
                         <a href="{{ route('mostrar.empleado.modificar', $empleado->id) }}" class="btn btn-warning action-btn" title="Modificar">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ route('eliminar.empleado', $empleado->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger action-btn" onclick="return confirm('¿Estás seguro de que deseas eliminar este empleado?');" title="Eliminar">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-danger action-btn eliminar-empleado" data-empleado-id="{{ $empleado->id }}" title="Eliminar">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </div>
                 </td>
             </tr>
             @endforeach
         </tbody>
+        <div class="px-6 py-3">
+            {{ $empleados->links() }}
+        </div>
     </table>
 </div>
 
@@ -97,37 +92,92 @@
 
 <style>
     .action-btn {
-        width: 40px; /* Ajusta este valor según sea necesario */
-        height: 40px; /* Ajusta este valor según sea necesario */
+        width: 40px;
+        height: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .action-btn i {
-        font-size: 18px; /* Ajusta el tamaño del icono según sea necesario */
+        font-size: 18px;
     }
 </style>
 
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Escuchar el clic en el botón para cambiar el estado del empleado
     document.querySelectorAll('.cambiar-estado').forEach(function(btn) {
         btn.addEventListener('click', function() {
+            // Obtener el ID del empleado
             const empleadoId = this.dataset.empleadoId;
             const btn = this;
 
+            // Enviar la solicitud AJAX al servidor
             axios.put('{{ route('update.estado.empleado') }}', {
                 empleado_id: empleadoId,
-                _token: '{{ csrf_token() }}'
+                _token: '{{ csrf_token() }}' // Añadir CSRF token
             })
             .then(function(response) {
-                // Recargar la página después de actualizar el estado
-                window.location.reload();
+                // Actualizar el estado en la interfaz de usuario
+                const estado = response.data.estado;
+                const estadoText = estado === 'Activo' ? 'Desactivar' : 'Activar';
+                btn.textContent = estadoText;
+                btn.classList.toggle('btn-success', estado === 'Inactivo');
+                btn.classList.toggle('btn-danger', estado === 'Activo');
+                document.querySelector('.estado-' + empleadoId).textContent = estado;
+                // Opcional: mostrar un mensaje de éxito
+                toastr.success('Estado del empleado actualizado exitosamente.');
             })
             .catch(function(error) {
+                // Manejar cualquier error
                 console.error('Error:', error);
+                // Opcional: mostrar un mensaje de error
                 toastr.error('Error al actualizar el estado del empleado.');
             });
         });
     });
 });
+    document.querySelectorAll('.eliminar-empleado').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const empleadoId = this.dataset.empleadoId;
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esto.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete('{{ url("empleados") }}/' + empleadoId, {
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(function(response) {
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El empleado ha sido eliminado.',
+                            'success'
+                        );
+                        // Eliminar la fila de la tabla
+                        document.getElementById('empleado-' + empleadoId).remove();
+                    })
+                    .catch(function(error) {
+                        Swal.fire(
+                            'Error',
+                            'Hubo un problema al eliminar el empleado.',
+                            'error'
+                        );
+                    });
+                }
+            });
+        });
+    });
+
 </script>
+

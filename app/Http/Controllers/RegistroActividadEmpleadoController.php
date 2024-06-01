@@ -13,10 +13,12 @@ use App\Models\Empleado;
 use Barryvdh\DomPDF\Facade\PDF; 
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 
 class RegistroActividadEmpleadoController extends Controller
 {
+    
     public function registrarActividadEmpleado()
         
 
@@ -150,10 +152,11 @@ class RegistroActividadEmpleadoController extends Controller
             $query->where('tipo_rendimiento', $request->input('rendimiento'));
         });
     }
-    $registros = $registros->orderBy('fecha', 'asc');
+    $registros = $registros->orderBy('id', 'asc');
 
     // Obtener los registros después de aplicar los filtros
-    $registros = $registros->get();
+   // $registros = $registros->get();
+   $registros = $registros->paginate(10);
 
     // Obtener actividades, lotes y rendimientos para los filtros
     $actividades = Actividad::all();
@@ -207,9 +210,27 @@ class RegistroActividadEmpleadoController extends Controller
     }
 
     public function  delete ($id){
-        $registro = RegistroActividadEmpleado::findorFail($id);
+       /* $registro = RegistroActividadEmpleado::findorFail($id);
         $registro->delete();
-        return redirect()->route('mostrar.actividades.empleado')->with('success','REgistro Eliminado Exitosamente');
+        return redirect()->route('mostrar.actividades.empleado')->with('success','REgistro Eliminado Exitosamente');*/
+        /*$registro = RegistroActividadEmpleado::findOrFail($id);
+    $registro->delete();
+
+    return response()->json([
+        'message' => 'Registro eliminado exitosamente.'
+    ]);*/
+    try {
+        $registro = RegistroActividadEmpleado::findOrFail($id);
+        $registro->delete();
+
+        return response()->json([
+            'message' => 'Registro eliminado exitosamente.'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Hubo un problema al eliminar el registro.'
+        ], 500);
+    }
     }
     public function generatePDF(Request $request)
     { 

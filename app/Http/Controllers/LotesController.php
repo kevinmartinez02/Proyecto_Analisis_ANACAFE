@@ -28,7 +28,7 @@ class LotesController extends Controller
         $search = $request->get('search', '');
 
         $lotes = Lote::where('nombreLote', 'like', "%{$search}%")
-            ->get();
+            ->paginate(10);
 
       
         return view('consultas.mostrarLotes',compact('lotes'));
@@ -47,13 +47,21 @@ class LotesController extends Controller
         $lote->nombreLote = $request->nombreLote;
         $lote->area = $request->area;
         $lote->save();
-        return redirect()->route('mostrar.lotes')->with('success', 'Actividad actualizada exitosamente.');
+        return redirect()->route('mostrar.lotes')->with('success', 'Lote actualizada exitosamente.');
     }
 
     public function delete(Request $request, $id){
-        $lote = Lote::findOrFail($id);
+        /*$lote = Lote::findOrFail($id);
         $lote->delete();
-        return redirect()->route('mostrar.lotes')->with('success', 'Actividad eliminada correctamente.');
+        return redirect()->route('mostrar.lotes')->with('success', 'Actividad eliminada correctamente.');*/
+        try {
+            $lote = Lote::findOrFail($id);
+            $lote->delete();
+    
+            return response()->json(['message' => 'Lote eliminado correctamente.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Hubo un problema al eliminar el lote.'], 500);
+        }
     }
     }
 
