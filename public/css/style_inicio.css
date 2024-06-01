@@ -1,0 +1,197 @@
+
+main {
+    padding: 20px;
+}
+
+.bienvenida {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.bienvenida-title {
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px; /* Ajusta el tamaño según sea necesario */
+}
+.bienvenida-parrafo{
+    text-align: center;
+    font-size: 14 px;
+}
+.dashboard {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-content h3 {
+    margin-top: 0;
+}
+
+.card-content p {
+    color: #666;
+}
+
+.card-content button {
+    background-color: #002147;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card-content button:hover {
+    background-color: #0056b3;
+}
+
+.acciones {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.acciones-title {
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5em; /* Ajusta el tamaño según sea necesario */
+    color: #002147; /* Color azul marino */
+    margin-bottom: 20px; /* Añadir espacio debajo del título */
+}
+.acciones button {
+    background-color: #002147;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+.acciones button:hover {
+    background-color: #0056b3;
+}
+
+.noticias {
+    margin-bottom: 20px;
+}
+
+.noticias article {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
+}
+
+
+header nav ul li {
+    display: inline;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    background-color: #0056b3;
+}
+
+main {
+    padding: 20px;
+}
+
+.bienvenida {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dashboard {
+    margin-bottom: 20px;
+}
+
+.kpis {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.kpi {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    width: 30%;
+}
+
+.graficos {
+    text-align: center;
+}
+
+.acciones {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.acciones button {
+    background-color: #002147;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+.acciones button:hover {
+    background-color: #0056b3;
+}
+
+.noticias {
+    margin-bottom: 20px;
+}
+
+.noticias article {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
+}

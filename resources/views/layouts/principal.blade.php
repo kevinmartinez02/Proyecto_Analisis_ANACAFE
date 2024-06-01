@@ -14,8 +14,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
    <link rel="stylesheet" href="{{ asset('/css/style_tabla.css') }}">
    <link rel="stylesheet" href="{{ asset('/css/style_fecha.css') }}">
+   <link rel="stylesheet" href="{{ asset('/css/style_inicio.css') }}">
+
    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
  <!-- Include Select2 CSS -->
     
 
@@ -23,21 +25,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-red dark:bg-gray-100">
-    <div class="min-h-screen bg-red dark:bg-gray-100">
-        
-        @yield('main')
-        <!-- Page Heading -->
-        @if (isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
-        
-        <!-- Page Content -->
     
-    </div>
 
     
     
